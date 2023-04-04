@@ -1,0 +1,27 @@
+{
+  "ts-node": {
+    "esm": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "compilerOptions": {
+    "module": "ES6",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"],
+      "@/*": ["src/*"]
+    },
+    "noImplicitAny": false,
+    "lib": ["es6"]
+  }
+}
