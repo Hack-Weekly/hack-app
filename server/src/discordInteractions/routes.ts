@@ -15,6 +15,7 @@ export default function discordInteractionsHandler(
     const body = req.body as any
     const sig = req.headers['X-Signature-Ed25519'] as string
     const ts = req.headers['X-Signature-Timestamp'] as string
+    console.log(req.headers)
     const appPublicKey =
       '5cb905f19d79c1c76e6fe34046923e514cb0a79277c5c32868b71c3bcd0e4646'
     console.log(sig)
