@@ -13,8 +13,8 @@ export default function discordInteractionsHandler(
   })
   server.post('', async (req, res) => {
     const body = req.body as any
-    const sig = req.headers['X-Signature-Ed25519'] as string
-    const ts = req.headers['X-Signature-Timestamp'] as string
+    const sig = req.headers['x-signature-ed25519'] as string
+    const ts = req.headers['x-signature-timestamp'] as string
     console.log(req.headers)
     const appPublicKey =
       '5cb905f19d79c1c76e6fe34046923e514cb0a79277c5c32868b71c3bcd0e4646'
