@@ -1,0 +1,1 @@
+docker build . -t hack-app-server -f Dockerfile.server
