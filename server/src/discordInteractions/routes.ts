@@ -17,7 +17,10 @@ export default function discordInteractionsHandler(
     const ts = req.headers['X-Signature-Timestamp'] as string
     const appPublicKey =
       '5cb905f19d79c1c76e6fe34046923e514cb0a79277c5c32868b71c3bcd0e4646'
+    console.log(sig)
+    console.log(ts)
     console.log(req.rawBody)
+
     const isValidRequest = verifyKey(req.rawBody, sig, ts, appPublicKey)
   })
 
