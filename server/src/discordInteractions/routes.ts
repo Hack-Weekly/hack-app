@@ -3,13 +3,35 @@ import { Static, Type } from '@sinclair/typebox'
 import { generateId } from '../utils/generateId.js'
 import { isValidEmail, isValidPassword } from '../utils/validators.js'
 import { InteractionType, verifyKey } from 'discord-interactions'
+import { discordRestApi } from '../discordRestApi.js'
+import { hackWeeklyDiscord, rollieId } from '../hackWeeklyDiscord.js'
+import { discordAppApi } from '../admin/discordAppApi.js'
+import { initializeApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
+
+const firebaseApp = initializeApp()
+const firestore = getFirestore(firebaseApp)
+
 export default function discordInteractionsHandler(
   server: FastifyInstance,
   options,
   done
 ) {
   server.get('', async (req, reply) => {
-    reply.code(200).send('get')
+    const resp = await discordRestApi.AddRole(
+      hackWeeklyDiscord.specialRoles.mentor,
+      rollieId
+    )
+    reply.code(200).send(resp)
+  })
+  server.get('/register', async (req, reply) => {
+    const res = await discordAppApi.AddAllCommands()
+    reply.code(200).send(res)
+  })
+  server.get('/firebase', async (req, reply) => {
+    const docs = await firestore.getAll()
+    console.log(docs)
+    reply.code(200).send(docs)
   })
   server.post('', async (req, res) => {
     const body = req.body as any
@@ -47,7 +69,7 @@ export default function discordInteractionsHandler(
       console.log('Body data')
       console.log(body.data)
       res.status(200).send({
-        type: 4,
+        type: InteractionType.MESSAGE_COMPONENT,
         data: { content: 'bar' },
       })
       return

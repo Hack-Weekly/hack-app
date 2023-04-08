@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "nodemon --watch './src/**/*.ts' --exec ts-node -T -r dotenv/config ./src/index.ts",
     "build": "tsc",
