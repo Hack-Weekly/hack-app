@@ -1,0 +1,1 @@
+docker run -d hack-app-server

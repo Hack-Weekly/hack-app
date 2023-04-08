@@ -30,16 +30,15 @@ export default function discordInteractionsHandler(
   })
   server.get('/firebase', async (req, reply) => {
     const testCol = db.collection('test')
-    const d1 = await testCol.get()
-    console.log(d1)
     const d2 = await testCol.listDocuments()
+    const ret = []
     for (const docRef of d2) {
       const doc = await docRef.get()
-      console.log(doc)
+      const data = doc.data()
+      console.log(data)
+      ret.push(data)
     }
-    const docs = await db.getAll()
-    console.log(docs)
-    reply.code(200).send(docs)
+    reply.code(200).send(ret)
   })
   server.post('', async (req, res) => {
     const body = req.body as any
