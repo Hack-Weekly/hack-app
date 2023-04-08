@@ -10,7 +10,7 @@ import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
 const firebaseApp = initializeApp()
-const firestore = getFirestore(firebaseApp)
+const db = getFirestore(firebaseApp)
 
 export default function discordInteractionsHandler(
   server: FastifyInstance,
@@ -29,7 +29,15 @@ export default function discordInteractionsHandler(
     reply.code(200).send(res)
   })
   server.get('/firebase', async (req, reply) => {
-    const docs = await firestore.getAll()
+    const testCol = db.collection('test')
+    const d1 = await testCol.get()
+    console.log(d1)
+    const d2 = await testCol.listDocuments()
+    for (const docRef of d2) {
+      const doc = await docRef.get()
+      console.log(doc)
+    }
+    const docs = await db.getAll()
     console.log(docs)
     reply.code(200).send(docs)
   })

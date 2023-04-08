@@ -1,12 +1,5 @@
 {
-  "dependencies": {
-    "@fastify/type-provider-typebox": "^2.4.0",
-    "@sinclair/typebox": "^0.25.24",
-    "discord-api-types": "^0.37.37",
-    "discord.js": "^14.9.0",
-    "dotenv": "^16.0.3",
-    "firebase-admin": "^11.6.0"
-  },
+  "dependencies": {},
   "scripts": {
     "client-start": "npm run start --workspace client",
     "client-dev": "npm run dev --workspace client",
