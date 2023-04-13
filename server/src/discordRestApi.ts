@@ -3,6 +3,7 @@
 import { hackWeeklyDiscord } from './hackWeeklyDiscord.js'
 import { DISCORD_BOT_PRIVATE_KEY } from './secrets.js'
 
+// This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
 class DiscordRestApi {
   guildId: string

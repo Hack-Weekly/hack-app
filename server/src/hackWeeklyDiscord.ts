@@ -1,3 +1,4 @@
+// This is static data about the hack weekly discord
 export const hackWeeklyDiscord = {
   id: '1082086126954758174',
   specialRoles: {

@@ -5,6 +5,7 @@ export interface HWTeam {
   githubTeamId: string
 }
 
+// This is meant to be a temporary full list of teams - eventually we move to firebase as source of truth
 export const teams = {
   lavenderSnake: {
     name: 'Lavender Snake',

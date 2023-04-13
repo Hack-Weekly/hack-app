@@ -1,6 +1,8 @@
 import { hackWeeklyDiscord } from './hackWeeklyDiscord.js'
 import { teamList } from './teams.js'
 
+// This represents higher level actions when interacting with Discord - it relies on the REST api wrapper, but exposes
+// operations that may require multiple such REST calls for a single logical operation
 class DiscordApi {
   async getUsersFromRole(roleId: string) {
     return ['todo']

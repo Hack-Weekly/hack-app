@@ -4,6 +4,7 @@ import { DISCORD_APP_PRIVATE_KEY, DISCORD_BOT_PRIVATE_KEY } from '../secrets.js'
 import { hackWeeklyDiscord } from '../hackWeeklyDiscord.js'
 import { DiscordAppCommand, hackWeeklyDiscordApp } from './discordApp.js'
 
+// This is a wrapper around Discords API to modify an application - in our case, just adding/updating commands
 const apiRoot = `https://discord.com/api/v10/applications/${hackWeeklyDiscordApp.id}/`
 class DiscordAppApi {
   async AddCommand(cmd: DiscordAppCommand) {

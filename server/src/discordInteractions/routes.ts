@@ -12,11 +12,14 @@ import { getFirestore } from 'firebase-admin/firestore'
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
 
+// These are the handlers for 'things that happen in discord'. Someone uses our app's commands, or context
+// menu action, it makes a request here.
 export default function discordInteractionsHandler(
   server: FastifyInstance,
   options,
   done
 ) {
+  // Test route
   server.get('', async (req, reply) => {
     const resp = await discordRestApi.AddRole(
       hackWeeklyDiscord.specialRoles.mentor,
@@ -24,10 +27,12 @@ export default function discordInteractionsHandler(
     )
     reply.code(200).send(resp)
   })
+  // Helper route - register all our commands with discord (only do this when you update the commands)
   server.get('/register', async (req, reply) => {
     const res = await discordAppApi.AddAllCommands()
     reply.code(200).send(res)
   })
+  // Test route for firebase interaction
   server.get('/firebase', async (req, reply) => {
     const testCol = db.collection('test')
     const d2 = await testCol.listDocuments()
@@ -40,6 +45,7 @@ export default function discordInteractionsHandler(
     }
     reply.code(200).send(ret)
   })
+  // The meat of this file - this does the verification and then handles the command
   server.post('', async (req, res) => {
     const body = req.body as any
     const sig = req.headers['x-signature-ed25519'] as string
@@ -59,21 +65,14 @@ export default function discordInteractionsHandler(
       return
     }
 
-    console.log('Check body 1')
-
     // Replying to ping (requirement 2.)
     if (body.type == InteractionType.PING) {
-      console.log('Body1')
       res.status(200).send({ type: InteractionType.PING })
       return
     }
 
-    console.log('Check foo')
     // Handle /foo Command
     if (body.data.name == 'foo') {
-      console.log('Body')
-      console.log(body)
-      console.log('Body data')
       console.log(body.data)
       res.status(200).send({
         type: InteractionType.MESSAGE_COMPONENT,
