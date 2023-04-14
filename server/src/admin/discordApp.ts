@@ -15,7 +15,8 @@ const commands: DiscordAppCommand[] = [
     default_member_permissions: `0`,
   },
   {
-    name: 'leaveTeam',
+    name: 'leaveteam',
+    description: 'Leave your current team',
     type: ApplicationCommandType.ChatInput,
   },
 ]

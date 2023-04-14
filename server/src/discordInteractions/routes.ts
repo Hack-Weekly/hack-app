@@ -81,7 +81,7 @@ export default function discordInteractionsHandler(
         data: { content: 'bar' },
       })
       return
-    } else if (body.data.name === 'leaveTeam') {
+    } else if (body.data.name === 'leaveteam') {
       const roles = body.member.roles
       const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
       if (!team) {
