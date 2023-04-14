@@ -1,5 +1,6 @@
 import {
   APIApplicationCommand,
+  ApplicationCommandOptionType,
   ApplicationCommandType,
 } from 'discord-api-types/v10'
 
@@ -12,6 +13,10 @@ const commands: DiscordAppCommand[] = [
     name: 'Recruit',
     type: ApplicationCommandType.User,
     default_member_permissions: `0`,
+  },
+  {
+    name: 'leaveTeam',
+    type: ApplicationCommandType.ChatInput,
   },
 ]
 

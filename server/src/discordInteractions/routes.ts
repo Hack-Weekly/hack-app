@@ -8,6 +8,8 @@ import { hackWeeklyDiscord, rollieId } from '../hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
+import { teamList } from '@/teams.js'
+import { discordApi } from '../discordApi.js'
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
@@ -72,13 +74,31 @@ export default function discordInteractionsHandler(
     }
 
     // Handle /foo Command
-    if (body.data.name == 'foo') {
-      console.log(body.data)
+    // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
+    if (body.data.name === 'foo') {
       res.status(200).send({
-        type: InteractionType.MESSAGE_COMPONENT,
+        type: 4,
         data: { content: 'bar' },
       })
       return
+    } else if (body.data.name === 'leaveTeam') {
+      const roles = body.member.roles
+      const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
+      if (!team) {
+        res.status(200).send({
+          type: 4,
+          data: { content: "You aren't on a team" },
+        })
+      } else {
+        await discordApi.removeUserFromTeam(
+          body.member.user.id,
+          team.discordTeamId
+        )
+        res.status(200).send({
+          type: 4,
+          data: { content: `Removed from ${team.name}` },
+        })
+      }
     }
 
     console.log('404')
