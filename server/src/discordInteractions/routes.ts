@@ -8,7 +8,7 @@ import { hackWeeklyDiscord, rollieId } from '../hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import { teamList } from '@/teams.js'
+import { teamList } from '../teams.js'
 import { discordApi } from '../discordApi.js'
 
 const firebaseApp = initializeApp()
