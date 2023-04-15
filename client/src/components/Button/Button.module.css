@@ -6,6 +6,5 @@
 }
 
 .button:hover {
-  background-color: var(--background-end);
-  color: var(--foreground);
+  background-color: var(--middleground);
 }

@@ -2,6 +2,7 @@
   --font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    --border-radius: 12px;
   --foreground: #04293a;
   --middleground: #041c32;
   --background-start: #f8f1e7;
@@ -10,11 +11,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --border-radius: 12px;
-    --foreground: #f8f1e7;
-    --middleground: #064663;
-    --background-start: #041c32;
-    --background-end: #04293a;
+  --foreground: #f8f1e7;
+  --middleground: #e6dfd5;
+  --background-start: #04293a;
+  --background-end: #041c32;
   }
 }
 
