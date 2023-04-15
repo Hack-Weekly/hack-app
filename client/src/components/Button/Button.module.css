@@ -1,0 +1,11 @@
+.button {
+  display: block;
+  padding: 0.8rem 2.8rem;
+  background-color: var(--foreground);
+  color: var(--background-start);
+}
+
+.button:hover {
+  background-color: var(--background-end);
+  color: var(--foreground);
+}
