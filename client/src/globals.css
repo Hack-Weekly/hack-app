@@ -1,0 +1,178 @@
+:root {
+  --font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    --border-radius: 12px;
+  --foreground: #04293a;
+  --middleground: #041c32;
+  --background-start: #f8f1e7;
+  --background-end: #064663;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  --foreground: #f8f1e7;
+  --middleground: #e6dfd5;
+  --background-start: #04293a;
+  --background-end: #041c32;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: var(--font-family);
+  color: var(--foreground);
+  background-color: var(--background-start);
+  min-height: 100%;
+}
+
+/* sets the body height of the browser, so that backgrounds and div heights work correctly. Color and background will almost certainly be altered; they are just placeholders */
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+/* sets the base font size for the document; turns on kerning pairs and ligatures */
+
+body,
+ul,
+ol,
+dl {
+  margin: 0;
+}
+article,
+aside,
+audio,
+footer,
+header,
+nav,
+section,
+video {
+  display: block;
+}
+
+/* ensures that older browsers will display HTML5 elements correctly */
+
+h1 {
+  font-size: 1.4rem;
+}
+/* begins to set up font sizes relative to base rem – h1 has been used as an example */
+
+p {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+/* sets hyphenation by default on paragraphs */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* changes textarea resizing from "both" (UA default) to vertical only */
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0.5rem;
+}
+
+/* causes tables to actually look like tables */
+
+img {
+  border: none;
+  max-width: 100%;
+}
+
+/* removes outlines from linked images (for older browsers and IE), sets up images for responsive design layout */
+
+/* reset default button styles */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+input[type="submit"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner {
+  border: 0px;
+}
+
+/* removes the OS X appearance from HTML5 search inputs and submit buttons when viewed in Safari */
+
+input:required:after {
+  color: #f00;
+  content: " *";
+}
+
+/* sets up required form fields with the conventional following red asterix */
+input[type="email"]:invalid {
+  background: #f00;
+}
+
+/* causes a visual alert in browsers that do client-side checking of HTML5 email field – this may already be the default in some browsers. */
+
+.right {
+  float: right;
+  margin-left: 2rem;
+  clear: right;
+}
+
+.left {
+  float: left;
+  margin-right: 2rem;
+  clear: left;
+}
+
+/* allows a quick shortcut for floating elements left and right while avoiding the “float quirk” problem */
+
+sub,
+sup {
+  line-height: 0;
+}
+
+/* sets superscript and subscript text so that it doesn't throw off leading for elements in which they are included */
+
+iframe,
+img,
+input,
+video,
+select,
+textarea {
+  height: auto;
+  max-width: 100%;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
