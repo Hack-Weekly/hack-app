@@ -30,17 +30,22 @@ import NavBar from "./components/NavBar/NavBar";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/teams/new",
-    element: <NewTeamPage />,
-  },
-  {
-    path: "/teams/:teamId",
-    loader: (p) => p.params.teamId,
-    element: <TeamPage />,
+    element: <NavBar />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/teams/new",
+        element: <NewTeamPage />,
+      },
+      {
+        path: "/teams/:teamId",
+        loader: (p) => p.params.teamId,
+        element: <TeamPage />,
+      },
+    ],
   },
 ]);
 
@@ -82,7 +87,6 @@ function App() {
       >
         Re-image database
       </button>
-      <NavBar />
       <RouterProvider router={router} />
     </div>
   );

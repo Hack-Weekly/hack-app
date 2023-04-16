@@ -1,5 +1,5 @@
 .container {
-  margin-top: 90px;
+  margin-top: var(--navbar-size);
   overflow: hidden;
 }
 
@@ -12,7 +12,7 @@
 /* TEAMS PANEL */
 .teamsPanel {
   position: relative;
-  padding: 2rem 0;
+  padding: 0.5rem 0;
   height: 20%;
   width: 100%;
   border-top: 2px solid var(--foreground);
@@ -24,6 +24,7 @@
 
 .teamsPanel .h2 {
   position: absolute;
+  font-size: 1.5rem;;
   top: 6%;
   left: 6%;
 }
@@ -31,7 +32,7 @@
 .addTeam {
   position: absolute;
   bottom: -15%;
-  left: 50%;
+  right: calc(var(--side-padding) * -1);
   transform: translateX(-50%);
   margin-bottom: 0.5rem;
 }
@@ -52,8 +53,8 @@
 
 /* PARTICIPATE? */
 .joinPanel {
-  margin-top: 8rem;
-  padding: 1rem;
+  margin-top: 3rem;
+  padding: 0 var(--side-padding);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

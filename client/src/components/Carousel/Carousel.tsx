@@ -14,7 +14,7 @@ const Carousel: FC<CarouselProps> = ({ items }) => {
   const handleMouseMove = (event: MouseEvent) => {
     if (isDragging && containerRef.current) {
       const x = event.pageX - containerRef.current.offsetLeft;
-      const walk = (x - startX) * 3;
+      const walk = (x - startX) * 0.05;
       containerRef.current.scrollLeft = containerRef.current.scrollLeft - walk;
     }
   };
@@ -37,15 +37,15 @@ const Carousel: FC<CarouselProps> = ({ items }) => {
   return (
     <div className={styles.carousel}>
       <div
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+
         ref={containerRef}
         className={styles.slides}
       >
         {items.map((item, index) => (
-          <div key={index} className={`${styles.slide}`}>
+          <div
+            key={index}
+            className={`${styles.slide}`}
+          >
             {item}
           </div>
         ))}

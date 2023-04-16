@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import styles from "./NavBar.module.css";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import Button from "../Button/Button";
 
 const NavBar: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,11 +52,19 @@ const NavBar: FC = () => {
             }`}
           ></span>
         </div>
-        <div className={styles.hack}>Hack Weekly Portal</div>
+        <Link to="/">
+          <div className={styles.hack}>Hack Weekly Portal</div>
+        </Link>
+        <Button
+          className={`${styles.getStarted} ${isScrolled && styles.scrolled}`}
+        >
+          Get Started
+        </Button>
       </header>
       <div
         className={`${styles.hamburgerLinks} ${isOpen && styles.links}`}
       ></div>
+      <Outlet />
     </>
   );
 };

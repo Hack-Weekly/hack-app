@@ -25,14 +25,14 @@
 
 .hack {
   position: absolute;
-  top: 20px;
-  left: 60px;
+  top: var(--nav-top);
+  left: calc(var(--side-padding) * 3);
 }
 
 .hamburger {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: var(--nav-top);
+  left: var(--side-padding);
   width: 25px;
   height: 25px;
   display: flex;
@@ -93,4 +93,17 @@
 
 .header.links {
   transform: translateX(45%);
+}
+
+/* GET STARTED BUTTON */
+.getStarted {
+  position: absolute;
+  top: var(--nav-top);
+  right: var(--side-padding);
+  padding: 0.5rem 1rem;
+}
+
+.getStarted.scrolled {
+  color: var(--foreground);
+  background-color: var(--background-end);
 }

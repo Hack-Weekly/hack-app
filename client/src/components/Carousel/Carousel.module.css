@@ -6,16 +6,18 @@
   width: 100vw;
   height: 100%;
   overflow-x: hidden;
+  scroll-behavior: auto;
 }
 
 .slides {
+  padding: 5rem;
   overflow: auto;
   display: flex;
   gap: 15rem;
   transition: 0.25s ease-out;
 }
 
-.slides:active {
-  transform: scale(1.01);
-  transition: transform 0.25s ease-out;
+.slide:active {
+  transform: scale(0.98);
+  transition: all 0.25s ease-out;
 }
