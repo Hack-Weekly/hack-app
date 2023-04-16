@@ -1,7 +1,4 @@
 import { FastifyInstance } from 'fastify'
-import { Static, Type } from '@sinclair/typebox'
-import { generateId } from '../utils/generateId.js'
-import { isValidEmail, isValidPassword } from '../utils/validators.js'
 import { InteractionType, verifyKey } from 'discord-interactions'
 import { discordRestApi } from '../discordRestApi.js'
 import { hackWeeklyDiscord, rollieId } from '../hackWeeklyDiscord.js'
@@ -22,7 +19,7 @@ export default function discordInteractionsHandler(
   done
 ) {
   // Test route
-  server.get('', async (req, reply) => {
+  server.get('/', async (req, reply) => {
     const resp = await discordRestApi.AddRole(
       hackWeeklyDiscord.specialRoles.mentor,
       rollieId
@@ -48,7 +45,8 @@ export default function discordInteractionsHandler(
     reply.code(200).send(ret)
   })
   // The meat of this file - this does the verification and then handles the command
-  server.post('', async (req, res) => {
+  server.post('/', async (req, res) => {
+    console.log('INSIDE SERVER POST')
     const body = req.body as any
     const sig = req.headers['x-signature-ed25519'] as string
     const ts = req.headers['x-signature-timestamp'] as string
