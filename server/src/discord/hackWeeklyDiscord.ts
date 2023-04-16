@@ -8,3 +8,4 @@ export const hackWeeklyDiscord = {
 }
 
 export const rollieId = '85375281417687040'
+export const testUserId = '1085366474593550367'
