@@ -1,0 +1,21 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel {
+  width: 100vw;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.slides {
+  overflow: auto;
+  display: flex;
+  gap: 15rem;
+  transition: 0.25s ease-out;
+}
+
+.slides:active {
+  transform: scale(1.01);
+  transition: transform 0.25s ease-out;
+}

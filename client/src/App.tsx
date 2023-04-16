@@ -82,7 +82,7 @@ function App() {
       >
         Re-image database
       </button>
-
+      <NavBar />
       <RouterProvider router={router} />
     </div>
   );
@@ -90,7 +90,6 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <NavBar />
     <App />
   </React.StrictMode>
 );
