@@ -98,9 +98,9 @@
 /* GET STARTED BUTTON */
 .getStarted {
   position: absolute;
-  top: var(--nav-top);
+  top: calc(var(--nav-top) - 0.4rem);
+  padding: 0.4rem 0.9rem;
   right: var(--side-padding);
-  padding: 0.5rem 1rem;
 }
 
 .getStarted.scrolled {

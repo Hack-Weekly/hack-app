@@ -55,11 +55,13 @@ const NavBar: FC = () => {
         <Link to="/">
           <div className={styles.hack}>Hack Weekly Portal</div>
         </Link>
-        <Button
-          className={`${styles.getStarted} ${isScrolled && styles.scrolled}`}
-        >
-          Get Started
-        </Button>
+        <Link to="/login">
+          <Button
+            className={`${styles.getStarted} ${isScrolled && styles.scrolled}`}
+          >
+            Get Started
+          </Button>
+        </Link>
       </header>
       <div
         className={`${styles.hamburgerLinks} ${isOpen && styles.links}`}

@@ -27,6 +27,7 @@ import { TeamPage } from "./pages/team/TeamPage";
 import { NewTeamPage } from "./pages/newTeam/NewTeamPage";
 import "./globals.css";
 import NavBar from "./components/NavBar/NavBar";
+import Login from "./pages/login/Login";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
+      { path: "/login", element: <Login /> },
       {
         path: "/teams/new",
         element: <NewTeamPage />,
