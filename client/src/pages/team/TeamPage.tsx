@@ -13,6 +13,8 @@ import {
   useTeam,
   useUser,
 } from "../../global-state/globalState";
+import styles from "./TeamPage.module.css";
+import Button from "../../components/Button/Button";
 
 const TeamContext = createContext<TeamT>({} as any);
 const useCurTeam = () => useContext(TeamContext);
@@ -26,7 +28,7 @@ const MembersPanel: FC = () => {
   const curTeam = useCurTeam();
 
   return (
-    <div>
+    <div className={styles.root}>
       <div>Members</div>
       <div>
         {curTeam.members.map((m) => (
@@ -69,7 +71,7 @@ const JoinPanel: FC = () => {
     <div>
       <div>Want to join this team?</div>
       <div>
-        <button>Apply</button>
+        <Button className={styles.button}>Apply</Button>
       </div>
     </div>
   );

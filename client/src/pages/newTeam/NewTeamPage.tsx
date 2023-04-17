@@ -14,6 +14,8 @@ import {
   useUser,
 } from "../../global-state/globalState";
 import { createCtx } from "../../utils";
+import styles from "./NewTeamPage.module.css";
+import Button from "../../components/Button/Button";
 
 const [useTeam, useSetTeam, TeamContext] = createCtx<Partial<TeamT>>();
 
@@ -46,7 +48,7 @@ export const NewTeamPage: FC = () => {
 
   return (
     <TeamContext defaultValue={{}}>
-      <div>
+      <div className={styles.root}>
         <div>
           <div>Name</div>
           <input
@@ -63,7 +65,9 @@ export const NewTeamPage: FC = () => {
             onChange={(e) => setDiscordName(e.target.value)}
           />
         </div>
-        <button onClick={create}>Create</button>
+        <Button onClick={create} className={styles.button}>
+          Create
+        </Button>
         <div>{result}</div>
       </div>
     </TeamContext>
