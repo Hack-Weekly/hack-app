@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   collection,
   getDocs,
@@ -31,9 +32,11 @@ const firebaseConfig = {
   appId: "1:725295282240:web:a82e2b527f44c4c57587a5",
   measurementId: "G-8RVZLGJ0CL",
 };
+import { useAppStore } from "./globalState";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 export const usersCol = collection(db, "users");
 export const teamsCol = collection(db, "teams");
 export const projectsCol = collection(db, "projects");
@@ -64,4 +67,13 @@ export async function loadDummyData() {
   loadDataForCol(dummyRepos, reposCol);
   loadDataForCol(dummyProjects, projectsCol);
   loadDataForCol(dummyImplementations, implementationsCol);
+}
+
+export async function githubSignIn() {
+  try {
+    const provider = new GithubAuthProvider();
+    signInWithPopup(auth, provider);
+  } catch (e) {
+    console.log(e);
+  }
 }

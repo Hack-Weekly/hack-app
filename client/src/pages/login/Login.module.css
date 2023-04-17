@@ -1,5 +1,4 @@
 .root {
-  margin-top: var(--navbar-size);
   display: grid;
   place-content: center;
   padding: 0 var(--side-padding);
