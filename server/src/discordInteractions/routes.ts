@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify'
 import { InteractionType, verifyKey } from 'discord-interactions'
-import { discordRestApi } from '../discordRestApi.js'
-import { hackWeeklyDiscord, rollieId } from '../hackWeeklyDiscord.js'
+import { discordRestApi } from '../discord/discordRestApi.js'
+import { hackWeeklyDiscord, rollieId, testUserId } from '../discord/hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { teamList } from '../teams.js'
-import { discordApi } from '../discordApi.js'
+import { discordApi } from '../discord/discordApi.js'
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
@@ -19,12 +19,10 @@ export default function discordInteractionsHandler(
   done
 ) {
   // Test route
-  server.get('/', async (req, reply) => {
-    const resp = await discordRestApi.AddRole(
-      hackWeeklyDiscord.specialRoles.mentor,
-      rollieId
-    )
+  server.get('', async (req, reply) => {
+    const resp = await discordApi.getUsersFromRole("")
     reply.code(200).send(resp)
+    return(resp)
   })
   // Helper route - register all our commands with discord (only do this when you update the commands)
   server.get('/register', async (req, reply) => {
@@ -73,14 +71,20 @@ export default function discordInteractionsHandler(
 
     // Handle /foo Command
     // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
-    if (body.data.name === 'foo') {
-      res.status(200).send({
-        type: 4,
-        data: { content: 'bar' },
-      })
-      return
-    } else if (body.data.name === 'leaveteam') {
-      const roles = body.member.roles
+    if (body.type === InteractionType.APPLICATION_COMMAND) {
+
+      if (body.data.name === 'foo') {
+        res.status(200).send({
+          type: 4,
+          data: { content: 'bar' },
+        })
+        return
+      }
+
+      // Handle /leaveteam Command
+      if (body.data.name === 'leaveteam') {
+        const roles = body.member.roles
+
       const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
       if (!team) {
         res.status(200).send({
@@ -94,14 +98,18 @@ export default function discordInteractionsHandler(
         )
         res.status(200).send({
           type: 4,
+          flags: 64,
           data: { content: `Removed from ${team.name}` },
         })
       }
     }
-
+    if (body.type === InteractionType.MESSAGE_COMPONENT) {
+      // Handle interaction triggered by message components
+    }
+  }
     console.log('404')
     res.status(404).send('unknown command')
-  })
+})
 
   done()
 }
