@@ -78,7 +78,8 @@ export default function discordInteractionsHandler(
           type: 4,
           data: {
             content: 'bar',
-            flags: 64, },
+            flags: 64,
+          },
         })
         return
       }
