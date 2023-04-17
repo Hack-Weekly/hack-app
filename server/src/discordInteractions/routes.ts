@@ -78,7 +78,9 @@ export default function discordInteractionsHandler(
       if (body.data.name === 'foo') {
         res.status(200).send({
           type: 4,
-          data: { content: 'bar' },
+          data: {
+            content: 'bar',
+            flags: 64, },
         })
         return
       }
@@ -91,7 +93,10 @@ export default function discordInteractionsHandler(
       if (!team) {
         res.status(200).send({
           type: 4,
-          data: { content: "You aren't on a team" },
+          data: {
+            content: "You aren't on a team",
+            flags: 64,
+          },
         })
       } else {
         await discordApi.removeUserFromTeam(
@@ -100,8 +105,10 @@ export default function discordInteractionsHandler(
         )
         res.status(200).send({
           type: 4,
-          flags: 64,
-          data: { content: `Removed from ${team.name}` },
+          data: {
+            content: `Removed from ${team.name}`,
+            flags: 64,
+          },
         })
       }
     }
