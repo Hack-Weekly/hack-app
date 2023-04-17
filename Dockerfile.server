@@ -15,7 +15,7 @@ RUN npm run server-build
 
 EXPOSE 3000
 ENV NODE_ENV production
-CMD [ "npm", "run", "server-dev" ]
+CMD [ "npm", "run", "server-prod" ]
 
 # TODOproduction environment
 # FROM nginx:stable-alpine

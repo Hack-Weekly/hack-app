@@ -25,6 +25,8 @@ import { RouterProvider } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import { TeamPage } from "./pages/team/TeamPage";
 import { NewTeamPage } from "./pages/newTeam/NewTeamPage";
+import "./globals.css";
+import NavBar from "./components/NavBar/NavBar";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +53,7 @@ function App() {
     implementationsCol,
     "setImplementations"
   );
+
   useEffect(() => {
     const unsubs = [
       userSync(),
@@ -66,6 +69,7 @@ function App() {
       }
     };
   }, []);
+
   return (
     <div>
       <button
@@ -86,6 +90,7 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
+    <NavBar />
     <App />
   </React.StrictMode>
 );
