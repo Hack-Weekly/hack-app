@@ -2,13 +2,19 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { TeamT } from "../../data-types/dataTypes";
 import { useAppStore, useCurrentProject } from "../../global-state/globalState";
+import styles from "./HomePage.module.css";
+import Button from "../../components/Button/Button";
 
 const CurrentProjectPanel: FC = () => {
   const currentProject = useCurrentProject();
   if (!currentProject) {
     return <div>No current project</div>;
   }
-  return <div>The current project is "{currentProject?.description}"</div>;
+  return (
+    <div className={styles.currentProject}>
+      The current project is: <br />"{currentProject?.description}"
+    </div>
+  );
 };
 
 const Team: FC<{ team: TeamT }> = ({ team }) => {
@@ -22,16 +28,16 @@ const TeamsPanel: FC = () => {
   const teams = useAppStore((state) => state.teams);
 
   return (
-    <div>
-      <div>Current Teams</div>
-      <div>
+    <div className={styles.teamsPanel}>
+      <div className={styles.h2}>Current Teams</div>
+      <div className={styles.teams}>
         {teams.map((t) => (
           <Team key={t.id} team={t} />
         ))}
       </div>
       <div>
         <Link to="teams/new">
-          <button>Add team</button>
+          <Button className={styles.addTeam}>Add Team</Button>
         </Link>
       </div>
     </div>
@@ -39,10 +45,10 @@ const TeamsPanel: FC = () => {
 };
 const JoinPanel: FC = () => {
   return (
-    <div>
+    <div className={styles.joinPanel}>
       <div>Want to participate?</div>
       <div>
-        <button>Sign up</button>
+        <Button>Sign up</Button>
       </div>
       <div>
         <div>All skill levels welcome, from mentors to new devs</div>
@@ -54,7 +60,7 @@ const JoinPanel: FC = () => {
 
 export const HomePage: FC = () => {
   return (
-    <div>
+    <div className={styles.container}>
       <CurrentProjectPanel />
       <TeamsPanel />
       <JoinPanel />
