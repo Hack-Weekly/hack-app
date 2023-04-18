@@ -28,6 +28,7 @@ import { NewTeamPage } from "./pages/newTeam/NewTeamPage";
 import "./globals.css";
 import NavBar from "./components/NavBar/NavBar";
 import Login from "./pages/login/Login";
+import { TestPage } from "./pages/test/TestPage";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
         path: "/teams/:teamId",
         loader: (p) => p.params.teamId,
         element: <TeamPage />,
+      },
+      {
+        path: "/test",
+        element: <TestPage />,
       },
     ],
   },
