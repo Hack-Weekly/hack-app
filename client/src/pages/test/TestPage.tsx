@@ -59,7 +59,7 @@ const useCommandHistory = () => useTestStore(state => state.commandHistory);
 const useAddCommand = () => (cmd: CommandInstance) => {
     useTestStore(state => state.addCommand)
 };
-const useSetCommandResult = () => (cmd: CommandInstance, res: ResultT) => useTestStore(state => state.)
+const useSetCommandResult = () => (cmd: CommandInstance, res: ResultT) => useTestStore(state => state)
 const CommandPanel = () => {
   const addCommand = useAddCommand();
   const setCommandResult = useSetCommandResult();

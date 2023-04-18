@@ -1,5 +1,9 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^5.3.9"
+  },
   "scripts": {
     "client-start": "npm run start --workspace client",
     "client-dev": "npm run dev --workspace client",

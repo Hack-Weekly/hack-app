@@ -35,11 +35,9 @@ const TeamsPanel: FC = () => {
           <Team key={team.id} team={team} />
         ))}
       />
-      <div>
-        <Link to="teams/new">
-          <Button className={styles.addTeam}>Add Team</Button>
-        </Link>
-      </div>
+      <Link to="teams/new">
+        <Button className={styles.addTeam}>Add Team</Button>
+      </Link>
     </div>
   );
 };
@@ -48,7 +46,9 @@ const JoinPanel: FC = () => {
     <div className={styles.joinPanel}>
       <div>Want to participate?</div>
       <div>
-        <Button>Sign up</Button>
+        <Link to="/login">
+          <Button>Sign up</Button>
+        </Link>
       </div>
       <div>
         <div>All skill levels welcome, from mentors to new devs</div>

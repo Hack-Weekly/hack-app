@@ -15,7 +15,6 @@ import {
   UserIdT,
   UserT,
 } from "../data-types/dataTypes";
-import { usersCol, teamsCol } from "./firebaseSetup";
 
 export const useCurrentUser = create<UserT | undefined>((set) => undefined);
 export const useUsers = create<Record<string, UserT>>((set) => ({}));
@@ -32,6 +31,8 @@ interface AppStore {
   setProjects: (_projects: ProjectT[]) => any;
   implementations: ImplementationT[];
   setImplementations: (_implementations: ImplementationT[]) => any;
+  currentUser: UserT | null;
+  setCurrentUser: (_user: UserT | null) => any;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
@@ -46,6 +47,8 @@ export const useAppStore = create<AppStore>((set) => ({
   implementations: [],
   setImplementations: (_implementations: ImplementationT[]) =>
     set(() => ({ implementations: _implementations })),
+  currentUser: null,
+  setCurrentUser: (_user: UserT | null) => set(() => ({ currentUser: _user })),
 }));
 
 export const useDbSync = (
@@ -85,3 +88,4 @@ export const useProject = (id: ProjectIdT) => {
   const projects = useAppStore((state) => state.projects);
   return projects.find((p) => p.id === id);
 };
+

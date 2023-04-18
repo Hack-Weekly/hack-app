@@ -6,7 +6,7 @@
   --foreground: #04293a;
   --middleground: #041c32;
   --background-start: #f8f1e7;
-  --background-end: #064663;
+  --background-end: #e6dfd5;
 
   --navbar-size: 90px;
   --nav-top: 20px;
@@ -22,7 +22,9 @@
   }
 }
 
-* {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
 }
 
