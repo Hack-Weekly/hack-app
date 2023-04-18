@@ -27,20 +27,27 @@ import { TeamPage } from "./pages/team/TeamPage";
 import { NewTeamPage } from "./pages/newTeam/NewTeamPage";
 import "./globals.css";
 import NavBar from "./components/NavBar/NavBar";
+import Login from "./pages/login/Login";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/teams/new",
-    element: <NewTeamPage />,
-  },
-  {
-    path: "/teams/:teamId",
-    loader: (p) => p.params.teamId,
-    element: <TeamPage />,
+    element: <NavBar />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      { path: "/login", element: <Login /> },
+      {
+        path: "/teams/new",
+        element: <NewTeamPage />,
+      },
+      {
+        path: "/teams/:teamId",
+        loader: (p) => p.params.teamId,
+        element: <TeamPage />,
+      },
+    ],
   },
 ]);
 
@@ -82,7 +89,6 @@ function App() {
       >
         Re-image database
       </button>
-
       <RouterProvider router={router} />
     </div>
   );
@@ -90,7 +96,6 @@ function App() {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <NavBar />
     <App />
   </React.StrictMode>
 );

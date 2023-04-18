@@ -1,8 +1,5 @@
 import fastify from 'fastify'
 import fastifyCors from '@fastify/cors'
-import jwt from './plugins/jwt.js'
-import fastifyWS from '@fastify/websocket'
-import { FastifyPluginCallback } from 'fastify'
 import discordInteractionsHandler from './discordInteractions/routes.js'
 import fastifyRaw from 'fastify-raw-body'
 
@@ -22,17 +19,8 @@ export function createServer() {
     allowedHeaders: '*',
   })
 
-  server.register(jwt)
   server.register(discordInteractionsHandler, {
     prefix: '/discordInteractions',
-  })
-
-  server.register(fastifyWS as unknown as FastifyPluginCallback)
-
-  server.decorate('broadcast', (data, filter) => {
-    for (const client of server.websocketServer.clients) {
-      client.send(JSON.stringify(data))
-    }
   })
 
   server.setErrorHandler((error, req, res) => {

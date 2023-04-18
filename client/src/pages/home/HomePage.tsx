@@ -4,6 +4,7 @@ import { TeamT } from "../../data-types/dataTypes";
 import { useAppStore, useCurrentProject } from "../../global-state/globalState";
 import styles from "./HomePage.module.css";
 import Button from "../../components/Button/Button";
+import Carousel from "../../components/Carousel/Carousel";
 
 const CurrentProjectPanel: FC = () => {
   const currentProject = useCurrentProject();
@@ -20,21 +21,20 @@ const CurrentProjectPanel: FC = () => {
 const Team: FC<{ team: TeamT }> = ({ team }) => {
   return (
     <Link to={`teams/${team.id}`}>
-      <div>{team.name}</div>
+      <div className={styles.teamCard}>{team.name}</div>
     </Link>
   );
 };
 const TeamsPanel: FC = () => {
   const teams = useAppStore((state) => state.teams);
-
   return (
     <div className={styles.teamsPanel}>
       <div className={styles.h2}>Current Teams</div>
-      <div className={styles.teams}>
-        {teams.map((t) => (
-          <Team key={t.id} team={t} />
+      <Carousel
+        items={teams.map((team) => (
+          <Team key={team.id} team={team} />
         ))}
-      </div>
+      />
       <div>
         <Link to="teams/new">
           <Button className={styles.addTeam}>Add Team</Button>
