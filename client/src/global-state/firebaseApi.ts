@@ -16,6 +16,8 @@ import {
   teamsCol,
   usersCol,
 } from "./firebaseSetup";
+import { auth } from "./firebaseSetup";
+import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 
 const addDoc = async (col: CollectionReference, doc: any) => {
   const d = { ...doc };
@@ -42,3 +44,12 @@ export const createProject = async (project: ProjectT) => {
 export const createImplementation = async (impl: ImplementationT) => {
   return await addDoc(implementationsCol, impl);
 };
+
+export async function githubSignIn() {
+  try {
+    const provider = new GithubAuthProvider();
+    signInWithPopup(auth, provider);
+  } catch (e) {
+    console.log(e);
+  }
+}
