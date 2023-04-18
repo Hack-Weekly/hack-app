@@ -23,6 +23,9 @@
     "@fastify/type-provider-typebox": "^2.4.0",
     "@fastify/websocket": "^7.1.3",
     "@google-cloud/storage": "^6.9.4",
+    "@octokit/auth-app": "^4.0.9",
+    "@octokit/core": "^4.2.0",
+    "@octokit/plugin-rest-endpoint-methods": "^7.0.1",
     "@octokit/rest": "^19.0.7",
     "@sinclair/typebox": "^0.25.24",
     "@types/luxon": "^3.2.0",
@@ -36,10 +39,12 @@
     "fastify-raw-body": "^4.2.0",
     "fastify-socket.io": "^4.0.0",
     "firebase-admin": "^11.6.0",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",
     "nacl": "^0.1.3",
     "octokit": "^2.0.14",
+    "path": "^0.12.7",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {
