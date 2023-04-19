@@ -24,13 +24,13 @@ import {
 } from "../dummy/dummyData";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBO50wyxMIGVvnpNWVI22YoTOkuC6lNzAI",
-  authDomain: "hack-weekly.firebaseapp.com",
-  projectId: "hack-weekly",
-  storageBucket: "hack-weekly.appspot.com",
-  messagingSenderId: "725295282240",
-  appId: "1:725295282240:web:a82e2b527f44c4c57587a5",
-  measurementId: "G-8RVZLGJ0CL",
+  apiKey: "AIzaSyBPOlLlSWGcUaAbviBCq1ge3j_LgHS8pUc",
+  authDomain: "hack-weekly-382703.firebaseapp.com",
+  projectId: "hack-weekly-382703",
+  storageBucket: "hack-weekly-382703.appspot.com",
+  messagingSenderId: "881748292428",
+  appId: "1:881748292428:web:79ca10bd2f448f955855e9",
+  measurementId: "G-Z1QMZXZ948",
 };
 import { useAppStore } from "./globalState";
 

@@ -1,4 +1,3 @@
-import { uuidv4 } from "@firebase/util";
 import { DateTime } from "luxon";
 import { FC } from "react";
 import { create } from "zustand";
@@ -8,7 +7,7 @@ import { HFlex, VFlex } from "../../utils";
 interface TestStore {
   commandHistory: CommandInstance[];
   addCommand: (cmd: CommandInstance) => any;
-  updateCommandStatus:  (command: CommandInstance, result: ResultT) => any;
+  updateCommandStatus: (command: CommandInstance, result: ResultT) => any;
 }
 export const useTestStore = create(
   immer<TestStore>((set) => ({
@@ -55,17 +54,18 @@ interface CommandInstance {
   end?: DateTime;
   result: ResultT;
 }
-const useCommandHistory = () => useTestStore(state => state.commandHistory);
+const useCommandHistory = () => useTestStore((state) => state.commandHistory);
 const useAddCommand = () => (cmd: CommandInstance) => {
-    useTestStore(state => state.addCommand)
+  useTestStore((state) => state.addCommand);
 };
-const useSetCommandResult = () => (cmd: CommandInstance, res: ResultT) => useTestStore(state => state)
+const useSetCommandResult = () => (cmd: CommandInstance, res: ResultT) =>
+  useTestStore((state) => state);
 const CommandPanel = () => {
   const addCommand = useAddCommand();
   const setCommandResult = useSetCommandResult();
   const runCommand = async (cmd: CommandT) => {
     const inst: CommandInstance = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       commandName: cmd.name,
       start: DateTime.now(),
       result: "pending",
