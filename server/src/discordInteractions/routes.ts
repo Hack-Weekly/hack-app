@@ -167,7 +167,7 @@ export default function discordInteractionsHandler(
         }
         const invokerTeam = teamList.find((t) =>
           invokerRoles.includes(t.discordTeamId)
-        ) // We'll just assume they aren't on multiple
+        )
         if (!invokerTeam) {
           // We should never be in this case where someone is a team lead but not on a team, but we'll
           // check anyway
@@ -177,8 +177,10 @@ export default function discordInteractionsHandler(
           })
           return
         }
-        // TODO: load this
-        const userTeam = undefined
+        const userRoles = await discordApi.getUserRoles(data.target_id)
+        const userTeam = teamList.find((t) =>
+          userRoles.includes(t.discordTeamId)
+        )
         if (userTeam) {
           res.status(200).send({
             type: 4,
