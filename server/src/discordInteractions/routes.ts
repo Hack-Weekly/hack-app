@@ -1,12 +1,17 @@
 import { FastifyInstance } from 'fastify'
 import { InteractionType, verifyKey } from 'discord-interactions'
 import { discordRestApi } from '../discord/discordRestApi.js'
-import { hackWeeklyDiscord, rollieId, testUserId } from '../discord/hackWeeklyDiscord.js'
+import {
+  hackWeeklyDiscord,
+  rollieId,
+  testUserId,
+} from '../discord/hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { teamList } from '../teams.js'
 import { discordApi } from '../discord/discordApi.js'
+import { githubApi } from '../github/githubApi.js'
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
@@ -20,9 +25,46 @@ export default function discordInteractionsHandler(
 ) {
   // Test route
   server.get('', async (req, reply) => {
-    const resp = await discordApi.getUsersFromRole("")
+    const resp = await discordApi.getUsersFromRole('')
     reply.code(200).send(resp)
-    return(resp)
+    return resp
+  })
+  // Github test
+  server.get('/github/add', async (req, reply) => {
+    const resp = await githubApi.addUserToTeam(
+      'rollie42',
+      '01_testing_create_team'
+    )
+    reply.code(200).send(resp)
+    return resp
+  })
+  server.get('/github/remove', async (req, reply) => {
+    const resp = await githubApi.removeUserFromTeam(
+      'rollie42',
+      '01_testing_create_team'
+    )
+    reply.code(200).send(resp)
+    return resp
+  })
+  server.get('/github/createTeam', async (req, reply) => {
+    const resp = await githubApi.createTeam('001_badgers')
+    reply.code(200).send(resp)
+    return resp
+  })
+  server.get('/github/deleteTeam', async (req, reply) => {
+    const resp = await githubApi.deleteTeam('001_badgers')
+    reply.code(200).send(resp)
+    return resp
+  })
+  server.get('/github/createRepo', async (req, reply) => {
+    const resp = await githubApi.createRepoForTeam('Test Proj', '001_badgers')
+    reply.code(200).send(resp)
+    return resp
+  })
+  server.get('/github/deleteRepo', async (req, reply) => {
+    const resp = await githubApi.deleteRepo('Test-Proj')
+    reply.code(200).send(resp)
+    return resp
   })
   // Helper route - register all our commands with discord (only do this when you update the commands)
   server.get('/register', async (req, reply) => {
@@ -72,7 +114,6 @@ export default function discordInteractionsHandler(
     // Handle /foo Command
     // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
     if (body.type === InteractionType.APPLICATION_COMMAND) {
-
       if (body.data.name === 'foo') {
         res.status(200).send({
           type: 4,
@@ -85,31 +126,31 @@ export default function discordInteractionsHandler(
       if (body.data.name === 'leaveteam') {
         const roles = body.member.roles
 
-      const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
-      if (!team) {
-        res.status(200).send({
-          type: 4,
-          data: { content: "You aren't on a team" },
-        })
-      } else {
-        await discordApi.removeUserFromTeam(
-          body.member.user.id,
-          team.discordTeamId
-        )
-        res.status(200).send({
-          type: 4,
-          flags: 64,
-          data: { content: `Removed from ${team.name}` },
-        })
+        const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
+        if (!team) {
+          res.status(200).send({
+            type: 4,
+            data: { content: "You aren't on a team" },
+          })
+        } else {
+          await discordApi.removeUserFromTeam(
+            body.member.user.id,
+            team.discordTeamId
+          )
+          res.status(200).send({
+            type: 4,
+            flags: 64,
+            data: { content: `Removed from ${team.name}` },
+          })
+        }
+      }
+      if (body.type === InteractionType.MESSAGE_COMPONENT) {
+        // Handle interaction triggered by message components
       }
     }
-    if (body.type === InteractionType.MESSAGE_COMPONENT) {
-      // Handle interaction triggered by message components
-    }
-  }
     console.log('404')
     res.status(404).send('unknown command')
-})
+  })
 
   done()
 }
