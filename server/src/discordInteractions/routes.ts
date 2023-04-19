@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { InteractionType, verifyKey } from 'discord-interactions'
+import { verifyKey } from 'discord-interactions'
 import { discordRestApi } from '../discord/discordRestApi.js'
 import {
   hackWeeklyDiscord,
@@ -12,6 +12,13 @@ import { getFirestore } from 'firebase-admin/firestore'
 import { teamList } from '../teams.js'
 import { discordApi } from '../discord/discordApi.js'
 import { githubApi } from '../github/githubApi.js'
+import {
+  APIInteraction,
+  APIInteractionResponse,
+  APIUserApplicationCommandInteraction,
+  InteractionResponseType,
+  InteractionType,
+} from 'discord-api-types/v10'
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
@@ -87,7 +94,7 @@ export default function discordInteractionsHandler(
   // The meat of this file - this does the verification and then handles the command
   server.post('/', async (req, res) => {
     console.log('INSIDE SERVER POST')
-    const body = req.body as any
+    const body = req.body as APIInteraction
     const sig = req.headers['x-signature-ed25519'] as string
     const ts = req.headers['x-signature-timestamp'] as string
     console.log(req.headers)
@@ -106,14 +113,19 @@ export default function discordInteractionsHandler(
     }
 
     // Replying to ping (requirement 2.)
-    if (body.type == InteractionType.PING) {
-      res.status(200).send({ type: InteractionType.PING })
+    if (body.type === InteractionType.Ping) {
+      const resp: APIInteractionResponse = {
+        type: InteractionResponseType.Pong,
+      }
+      res.status(200).send(resp)
       return
     }
 
-    // Handle /foo Command
     // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
-    if (body.type === InteractionType.APPLICATION_COMMAND) {
+    // Resolve the calling user
+    const invoker = body.member.user.id
+    const invokerRoles = body.member.roles
+    if (body.type === InteractionType.ApplicationCommand) {
       if (body.data.name === 'foo') {
         res.status(200).send({
           type: 4,
@@ -124,29 +136,72 @@ export default function discordInteractionsHandler(
 
       // Handle /leaveteam Command
       if (body.data.name === 'leaveteam') {
-        const roles = body.member.roles
-
-        const team = teamList.find((t) => roles.includes(t.discordTeamId)) // We'll just assume they aren't on multiple
+        const team = teamList.find((t) =>
+          invokerRoles.includes(t.discordTeamId)
+        ) // We'll just assume they aren't on multiple
         if (!team) {
           res.status(200).send({
             type: 4,
             data: { content: "You aren't on a team" },
           })
         } else {
-          await discordApi.removeUserFromTeam(
-            body.member.user.id,
-            team.discordTeamId
-          )
+          await discordApi.removeUserFromTeams(invoker, [
+            team.discordTeamId,
+            // If they are leaving their team, they don't keep team lead role
+            hackWeeklyDiscord.specialRoles.teamLead,
+          ])
           res.status(200).send({
             type: 4,
             flags: 64,
             data: { content: `Removed from ${team.name}` },
           })
         }
+      } else if (body.data.name === 'Recruit') {
+        const data = (body as APIUserApplicationCommandInteraction).data
+        if (!invokerRoles.includes(hackWeeklyDiscord.specialRoles.teamLead)) {
+          res.status(200).send({
+            type: 4,
+            data: { content: "You aren't a team lead" },
+          })
+          return
+        }
+        const invokerTeam = teamList.find((t) =>
+          invokerRoles.includes(t.discordTeamId)
+        ) // We'll just assume they aren't on multiple
+        if (!invokerTeam) {
+          // We should never be in this case where someone is a team lead but not on a team, but we'll
+          // check anyway
+          res.status(200).send({
+            type: 4,
+            data: { content: "You aren't on a team" },
+          })
+          return
+        }
+        // TODO: load this
+        const userTeam = undefined
+        if (userTeam) {
+          res.status(200).send({
+            type: 4,
+            data: {
+              content:
+                'User is already on a team - ask them to /leaveteam first',
+            },
+          })
+          return
+        }
+
+        // Checks all done - add the user
+        await discordApi.addUserToTeam(
+          data.target_id,
+          invokerTeam.discordTeamId
+        )
+        res.status(200).send({
+          type: 4,
+          data: { content: 'User recruited!' },
+        })
       }
-      if (body.type === InteractionType.MESSAGE_COMPONENT) {
-        // Handle interaction triggered by message components
-      }
+    } else if (body.type === InteractionType.MessageComponent) {
+      // Handle interaction triggered by message components
     }
     console.log('404')
     res.status(404).send('unknown command')

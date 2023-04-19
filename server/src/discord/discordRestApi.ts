@@ -30,18 +30,19 @@ class DiscordRestApi {
     return await this.request('GET', path)
   }
   async getGuildMembers() {
-   const limit = 1000 //  max. limit as mentioned by the docs: https://discord.com/developers/docs/resources/guild#list-guild-members
+    const limit = 1000 //  max. limit as mentioned by the docs: https://discord.com/developers/docs/resources/guild#list-guild-members
     let path = `/guilds/${this.guildId}/members?limit=${limit}`
-    let serverUsers = await this.request('GET', path);
+    let serverUsers = await this.request('GET', path)
     while (serverUsers.length % limit === 0) {
-      path = `/guilds/${this.guildId}/members?limit=${limit}&after=${serverUsers[serverUsers.length-1].user.id}`
-      serverUsers = [...serverUsers, ...await this.request('GET', path)]
+      path = `/guilds/${this.guildId}/members?limit=${limit}&after=${
+        serverUsers[serverUsers.length - 1].user.id
+      }`
+      serverUsers = [...serverUsers, ...(await this.request('GET', path))]
     }
-    return serverUsers
   }
   async AddRole(roleId: string, userId: string) {
     const path = `/guilds/${this.guildId}/members/${userId}/roles/${roleId}`
-    return await this.request('PUT',path)
+    return await this.request('PUT', path)
   }
   async RemoveRole(roleId: string, userId: string) {
     const path = `/guilds/${this.guildId}/members/${userId}/roles/${roleId}`
