@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyReply } from 'fastify'
 import { verifyKey } from 'discord-interactions'
 import { discordRestApi } from '../discord/discordRestApi.js'
 import {
@@ -22,6 +22,12 @@ import {
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
+const interactionReply = (message: string, resp: FastifyReply) => {
+  resp.status(200).send({
+    type: 4,
+    data: { content: message, flags: 64 },
+  })
+}
 
 // These are the handlers for 'things that happen in discord'. Someone uses our app's commands, or context
 // menu action, it makes a request here.
@@ -127,10 +133,7 @@ export default function discordInteractionsHandler(
     const invokerRoles = body.member.roles
     if (body.type === InteractionType.ApplicationCommand) {
       if (body.data.name === 'foo') {
-        res.status(200).send({
-          type: 4,
-          data: { content: 'bar' },
-        })
+        interactionReply('bar', res)
         return
       }
 
@@ -140,29 +143,19 @@ export default function discordInteractionsHandler(
           invokerRoles.includes(t.discordTeamId)
         ) // We'll just assume they aren't on multiple
         if (!team) {
-          res.status(200).send({
-            type: 4,
-            data: { content: "You aren't on a team" },
-          })
+          interactionReply("You aren't on a team", res)
         } else {
           await discordApi.removeUserFromTeams(invoker, [
             team.discordTeamId,
             // If they are leaving their team, they don't keep team lead role
             hackWeeklyDiscord.specialRoles.teamLead,
           ])
-          res.status(200).send({
-            type: 4,
-            flags: 64,
-            data: { content: `Removed from ${team.name}` },
-          })
+          interactionReply(`Removed from ${team.name}`, res)
         }
       } else if (body.data.name === 'Recruit') {
         const data = (body as APIUserApplicationCommandInteraction).data
         if (!invokerRoles.includes(hackWeeklyDiscord.specialRoles.teamLead)) {
-          res.status(200).send({
-            type: 4,
-            data: { content: "You aren't a team lead" },
-          })
+          interactionReply("You aren't a team lead", res)
           return
         }
         const invokerTeam = teamList.find((t) =>
@@ -171,10 +164,7 @@ export default function discordInteractionsHandler(
         if (!invokerTeam) {
           // We should never be in this case where someone is a team lead but not on a team, but we'll
           // check anyway
-          res.status(200).send({
-            type: 4,
-            data: { content: "You aren't on a team" },
-          })
+          interactionReply("You aren't on a team", res)
           return
         }
         const userRoles = await discordApi.getUserRoles(data.target_id)
@@ -182,13 +172,10 @@ export default function discordInteractionsHandler(
           userRoles.includes(t.discordTeamId)
         )
         if (userTeam) {
-          res.status(200).send({
-            type: 4,
-            data: {
-              content:
-                'User is already on a team - ask them to /leaveteam first',
-            },
-          })
+          interactionReply(
+            'User is already on a team - ask them to /leaveteam first',
+            res
+          )
           return
         }
 
@@ -197,10 +184,7 @@ export default function discordInteractionsHandler(
           data.target_id,
           invokerTeam.discordTeamId
         )
-        res.status(200).send({
-          type: 4,
-          data: { content: 'User recruited!' },
-        })
+        interactionReply('User recruited!', res)
       }
     } else if (body.type === InteractionType.MessageComponent) {
       // Handle interaction triggered by message components
