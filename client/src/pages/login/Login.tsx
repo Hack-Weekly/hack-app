@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
-import { githubSignIn } from "../../global-state/firebaseApi";
+import { githubSignIn } from "../../global-state/firebaseSetup";
 
 const Login: FC = () => {
   return (
