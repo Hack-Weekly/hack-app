@@ -1,4 +1,4 @@
-import { discordApi } from './discordApi.js'
+import { discordApi } from './discord/discordApi.js'
 import { githubApi } from './github/githubApi.js'
 
 class HWApi {

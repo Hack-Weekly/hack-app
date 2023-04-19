@@ -3,19 +3,29 @@ FROM node:19-alpine as build
 ENV NODE_VERSION 19.7.0
 WORKDIR /app
 COPY ./package*.json ./
+COPY ./server/package*.json ./server/
 ENV PATH /app/node_modules/.bin:$PATH
 
-# build server
-WORKDIR /app/server
-COPY ./server/package*.json ./
-RUN npm ci --silent
-WORKDIR /app
-COPY ./server ./server
-RUN npm run server-build
+# Update npm | Install pnpm | Set PNPM_HOME | Install global packages
+RUN npm i -g npm@latest; \
+ # Install pnpm
+ npm install -g pnpm; \
+ pnpm --version; \
+ pnpm setup; \
+ mkdir -p /usr/local/share/pnpm &&\
+ export PNPM_HOME="/usr/local/share/pnpm" &&\
+ export PATH="$PNPM_HOME:$PATH"; \
+ pnpm bin -g &&\
+ # Install dependencies
+ pnpm add -g pm2 &&\
+ pnpm install
+
+COPY . .
+RUN pnpm --filter server run build
 
 EXPOSE 3000
 ENV NODE_ENV production
-CMD [ "npm", "run", "server-prod" ]
+CMD [ "pnpm", "--filter", "server", "run", "prod" ]
 
 # TODOproduction environment
 # FROM nginx:stable-alpine
