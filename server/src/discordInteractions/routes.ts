@@ -21,8 +21,6 @@ import {
 } from 'discord-api-types/v10'
 import { firestoreDb } from '../firebase.js'
 
-const firebaseApp = initializeApp()
-const db = getFirestore(firebaseApp)
 const interactionReply = (message: string, resp: FastifyReply) => {
   resp.status(200).send({
     type: 4,
