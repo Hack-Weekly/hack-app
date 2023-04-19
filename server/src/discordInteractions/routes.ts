@@ -19,9 +19,7 @@ import {
   InteractionResponseType,
   InteractionType,
 } from 'discord-api-types/v10'
-
-const firebaseApp = initializeApp()
-const db = getFirestore(firebaseApp)
+import { firestoreDb } from '../firebase.js'
 
 // These are the handlers for 'things that happen in discord'. Someone uses our app's commands, or context
 // menu action, it makes a request here.
@@ -80,7 +78,7 @@ export default function discordInteractionsHandler(
   })
   // Test route for firebase interaction
   server.get('/firebase', async (req, reply) => {
-    const testCol = db.collection('test')
+    const testCol = firestoreDb.collection('test')
     const d2 = await testCol.listDocuments()
     const ret = []
     for (const docRef of d2) {
