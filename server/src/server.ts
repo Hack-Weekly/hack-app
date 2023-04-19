@@ -2,6 +2,13 @@ import fastify from 'fastify'
 import fastifyCors from '@fastify/cors'
 import discordInteractionsHandler from './discordInteractions/routes.js'
 import fastifyRaw from 'fastify-raw-body'
+import authRoutes from './auth/authRoutes.js'
+import oauthPlugin from '@fastify/oauth2'
+import {
+  DISCORD_APP_PRIVATE_KEY,
+  GITHUB_CLIENT_SECRET,
+  GITHUB_PRIVATE_KEY,
+} from './secrets.js'
 
 export function createServer() {
   const server = fastify()
@@ -21,6 +28,35 @@ export function createServer() {
 
   server.register(discordInteractionsHandler, {
     prefix: '/discordInteractions',
+  })
+
+  server.register(oauthPlugin, {
+    name: 'discordAuth',
+    scope: ['identify'],
+    credentials: {
+      client: {
+        id: '1092652146077487175',
+        secret: DISCORD_APP_PRIVATE_KEY,
+      },
+      auth: oauthPlugin.fastifyOauth2.DISCORD_CONFIGURATION,
+    },
+    startRedirectPath: '/login/discord',
+    callbackUri: 'http://localhost:3000/auth/discord',
+  })
+  server.register(oauthPlugin, {
+    name: 'githubAuth',
+    credentials: {
+      client: {
+        id: 'Iv1.cb28d61adce5c706',
+        secret: GITHUB_CLIENT_SECRET,
+      },
+      auth: oauthPlugin.fastifyOauth2.GITHUB_CONFIGURATION,
+    },
+    startRedirectPath: '/login/github',
+    callbackUri: 'http://localhost:3000/auth/github',
+  })
+  server.register(authRoutes, {
+    prefix: '/auth',
   })
 
   server.setErrorHandler((error, req, res) => {

@@ -1,9 +1,10 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./Login.module.css";
 import Button from "../../components/Button/Button";
 import { githubSignIn } from "../../global-state/firebaseSetup";
 
 const Login: FC = () => {
+  const [showDiscordPopup, setShowDiscordPopup] = useState(false);
   return (
     <div className={styles.root}>
       <h3>Welcome</h3>
@@ -11,8 +12,7 @@ const Login: FC = () => {
         Please register both your GitHub and Discord accounts to get started
       </h4>
       <div className={styles.signIn}>
-        <Button onClick={githubSignIn}>Github Sign In</Button>
-        <Button>Discord Sign In</Button>
+        <a href="http://localhost:3000/login/discord">Sign up</a>
       </div>
     </div>
   );

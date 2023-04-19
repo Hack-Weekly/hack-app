@@ -19,6 +19,7 @@ import {
   InteractionResponseType,
   InteractionType,
 } from 'discord-api-types/v10'
+import { firestoreDb } from '../firebase.js'
 
 const firebaseApp = initializeApp()
 const db = getFirestore(firebaseApp)
@@ -86,7 +87,7 @@ export default function discordInteractionsHandler(
   })
   // Test route for firebase interaction
   server.get('/firebase', async (req, reply) => {
-    const testCol = db.collection('test')
+    const testCol = firestoreDb.collection('test')
     const d2 = await testCol.listDocuments()
     const ret = []
     for (const docRef of d2) {

@@ -5,6 +5,28 @@ import { DISCORD_BOT_PRIVATE_KEY } from '../secrets.js'
 
 // This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
+export class DiscordUserRestApi {
+  token: string
+  constructor(token: string) {
+    this.token = token
+  }
+
+  async getUserData() {
+    const resp = await fetch(apiRoot + '/users/@me', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    if (!resp.ok) {
+      console.log(resp)
+      throw new Error(await resp.json())
+    }
+
+    return resp.status === 204 ? '{}' : await resp.json()
+  }
+}
 class DiscordRestApi {
   guildId: string
   constructor() {
