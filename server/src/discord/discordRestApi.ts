@@ -39,6 +39,7 @@ class DiscordRestApi {
       }`
       serverUsers = [...serverUsers, ...(await this.request('GET', path))]
     }
+    return serverUsers
   }
   async AddRole(roleId: string, userId: string) {
     const path = `/guilds/${this.guildId}/members/${userId}/roles/${roleId}`
