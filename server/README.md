@@ -66,10 +66,10 @@ prerequisite: A firebase project
 
 ### .env
 Go to Project Settings (gearbox) in Firebase and go to Service Accounts tab.\
-Generate new private key for Firebase Admin SDK and complete your .env for the serviceAccount variable.\
+Generate new private key for Firebase Admin SDK and complete your .env for the serviceAccount variable.
 
 ***NODE_ENV="development"*** to intialize firebase to emulator
-
+```javascript
 const serviceAccount = {
   type: 'service_account',
   project_id: process.env.PROJECT_ID,
@@ -82,7 +82,7 @@ const serviceAccount = {
   auth_provider_x509_cert_url: process.env.AUTH_PROVIDER,
   client_x509_cert_url: process.env.CLIENT_URL,
 }
-
+```
 1. cd server
 2. pnpm install (need firebase-tools)
 3. firebase init (enable Firestore and Emulator)
