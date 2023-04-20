@@ -60,3 +60,31 @@ Note: if you need api credentials, put them into .env, in the format
 > SOME_API_KEY=xxxx-xxxxx-xxxxxxxx
 
 This will be loaded via dotenv and allow local access to remote APIs guarded by secrets
+
+## FIREBASE EMULATOR
+prerequisite: A firebase project
+
+### .env
+Go to Project Settings (gearbox) in Firebase and go to Service Accounts tab.\
+Generate new private key for Firebase Admin SDK and complete your .env for the serviceAccount variable.\
+
+***NODE_ENV="development"*** to intialize firebase to emulator
+
+const serviceAccount = {
+  type: 'service_account',
+  project_id: process.env.PROJECT_ID,
+  private_key_id: process.env.PRIVATE_KEY_ID,
+  private_key: process.env.PRIVATE_KEY,
+  client_email: process.env.CLIENT_EMAIL,
+  client_id: process.env.CLIENT_ID,
+  auth_uri: process.env.AUTH_URI,
+  token_uri: process.env.TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.AUTH_PROVIDER,
+  client_x509_cert_url: process.env.CLIENT_URL,
+}
+
+1. cd server
+2. pnpm install (need firebase-tools)
+3. firebase init (enable Firestore and Emulator)
+4. select default files and ports
+5. ```firebase emulators:start```

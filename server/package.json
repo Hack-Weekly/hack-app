@@ -41,6 +41,7 @@
     "fastify-raw-body": "^4.2.0",
     "fastify-socket.io": "^4.0.0",
     "firebase-admin": "^11.6.0",
+    "firebase-tools": "^11.28.0",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",
