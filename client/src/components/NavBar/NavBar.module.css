@@ -42,7 +42,7 @@
 
 .hamburger span {
   display: block;
-  height: 2.2px;
+  height: 2px;
   background-color: var(--foreground);
   margin: 2px 0;
   transition: transform 0.3s ease-out;
@@ -63,7 +63,7 @@
 
 /* Rotate the span elements to create the "open" hamburger menu effect */
 .hamburger.open span:first-child {
-  transform: rotate(45deg) translate(2.5px, 2.5px);
+  transform: rotate(45deg) translate(3px, 3px);
 }
 
 .hamburger.open span:nth-child(2) {
@@ -71,7 +71,7 @@
 }
 
 .hamburger.open span:last-child {
-  transform: rotate(-45deg) translate(2.5px, -2.5px);
+  transform: rotate(-45deg) translate(3px, -3px);
 }
 
 .hamburgerLinks {

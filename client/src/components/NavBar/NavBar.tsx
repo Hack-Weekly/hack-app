@@ -1,15 +1,17 @@
-import { FC, useState, useEffect } from "react";
+import {FC, useState, useEffect, useRef} from "react";
 import styles from "./NavBar.module.css";
 import { Link, Outlet } from "react-router-dom";
 import Button from "../Button/Button";
+import clsx from "clsx";
 
 const NavBar: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 0) {
+      if (window.scrollY > 0) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -21,6 +23,19 @@ const NavBar: FC = () => {
     };
   }, []);
 
+    // close hamburger menu when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+        document.removeEventListener("click", handleClickOutside);
+    }
+    }, []);
+
   const handleHamburger = () => {
     setIsOpen((prevState) => !prevState);
   };
@@ -28,28 +43,20 @@ const NavBar: FC = () => {
   return (
     <>
       <header
-        className={`${styles.header} ${isScrolled && styles.scrolled} ${
-          isOpen && styles.links
-        }`}
+        className={clsx(styles.header, isScrolled && styles.scrolled, {[styles.links]:isOpen})}
       >
         <div
           onClick={handleHamburger}
-          className={`${styles.hamburger} ${isOpen && styles.open} `}
+          className={clsx(styles.hamburger, isOpen && styles.open)}
         >
           <span
-            className={`${isScrolled && styles.scrolled} ${
-              styles.hamburgerTop
-            }`}
+            className={clsx(isScrolled && styles.scrolled, styles.hamburgerTop)}
           ></span>
           <span
-            className={`${isScrolled && styles.scrolled} ${
-              styles.hamburgerMid
-            }`}
+            className={clsx(isScrolled && styles.scrolled, styles.hamburgerMid)}
           ></span>
           <span
-            className={`${isScrolled && styles.scrolled} ${
-              styles.hamburgerBot
-            }`}
+            className={clsx(isScrolled && styles.scrolled, styles.hamburgerBot)}
           ></span>
         </div>
         <Link to="/">
@@ -57,14 +64,14 @@ const NavBar: FC = () => {
         </Link>
         <Link to="/login">
           <Button
-            className={`${styles.getStarted} ${isScrolled && styles.scrolled}`}
+            className={clsx(styles.getStarted, isScrolled && styles.scrolled)}
           >
             Get Started
           </Button>
         </Link>
       </header>
-      <div
-        className={`${styles.hamburgerLinks} ${isOpen && styles.links}`}
+      <div ref={menuRef}
+        className={clsx(styles.hamburgerLinks, isOpen && styles.links)}
       ></div>
       <Outlet />
     </>
