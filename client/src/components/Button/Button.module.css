@@ -3,8 +3,9 @@
   padding: 0.8rem 2.8rem;
   background-color: var(--foreground);
   color: var(--background-start);
+  transition: background-color 0.25s ease-out;
 }
 
-.button:hover {
+.button:hover, .button:focus {
   background-color: var(--middleground);
 }
