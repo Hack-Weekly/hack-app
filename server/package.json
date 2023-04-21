@@ -12,7 +12,8 @@
     "prod": "nodemon --watch './src/**/*.ts' --exec ts-node -T ./src/index.ts",
     "build": "tsc",
     "test": "jest --coverage",
-    "test:watch": "npm run test -- --watchAll"
+    "test:watch": "npm run test -- --watchAll",
+    "emulators": "firebase emulators:start --project local-emulator-proj"
   },
   "keywords": [],
   "author": "",

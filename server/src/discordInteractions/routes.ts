@@ -87,6 +87,7 @@ export default function discordInteractionsHandler(
   server.get('/firebase', async (req, reply) => {
     const testCol = firestoreDb.collection('test')
     const d2 = await testCol.listDocuments()
+    testCol.add({ user: 'tester' })
     const ret = []
     for (const docRef of d2) {
       const doc = await docRef.get()
