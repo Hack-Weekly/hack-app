@@ -20,6 +20,7 @@ import {
   InteractionType,
 } from 'discord-api-types/v10'
 import { firestoreDb } from '../firebase.js'
+import { currentHost } from '@/shared.js'
 
 const interactionReply = (message: string, resp: FastifyReply) => {
   resp.status(200).send({
@@ -135,6 +136,21 @@ export default function discordInteractionsHandler(
       if (body.data.name === 'foo') {
         interactionReply('bar', res)
         return
+      }
+
+      if (body.data.name === 'register') {
+        // check if existing registered user
+        const discordId = await firestoreDb
+          .collection('user')
+          .where('discordId', '==', invoker)
+        if (discordId) {
+          interactionReply("You're already registered!", res)
+          return
+        }
+        interactionReply(
+          `To register, navigate to ${currentHost}/auth/register`,
+          res
+        )
       }
 
       // Handle /leaveteam Command

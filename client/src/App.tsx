@@ -85,7 +85,7 @@ function App() {
   return (
     <div>
       <button
-        css={{
+        style={{
           position: "fixed",
           right: "20px",
           bottom: "20px",
