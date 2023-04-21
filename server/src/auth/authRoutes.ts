@@ -24,7 +24,7 @@ import oauthPlugin, { OAuth2Namespace } from '@fastify/oauth2'
 import { firestoreDb } from '../firebase.js'
 import { UserT } from 'shared'
 import { Octokit } from 'octokit'
-import { currentHost } from '@/shared.js'
+import { currentHost } from '../shared.js'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -83,6 +83,7 @@ export default function authRoutes(server: FastifyInstance, options, done) {
     reply.code(200).send('ok')
     return
   })
+
   server.get('/register', async (req, reply) => {
     reply.redirect(`${currentHost}/login/discord`)
   })

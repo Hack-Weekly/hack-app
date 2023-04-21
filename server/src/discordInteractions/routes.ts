@@ -20,7 +20,8 @@ import {
   InteractionType,
 } from 'discord-api-types/v10'
 import { firestoreDb } from '../firebase.js'
-import { currentHost } from '@/shared.js'
+import { currentHost } from '../shared.js'
+import { UserT } from 'shared'
 
 const interactionReply = (message: string, resp: FastifyReply) => {
   resp.status(200).send({
@@ -138,12 +139,18 @@ export default function discordInteractionsHandler(
         return
       }
 
+      // Register new user
       if (body.data.name === 'register') {
-        // check if existing registered user
-        const discordId = await firestoreDb
-          .collection('user')
-          .where('discordId', '==', invoker)
-        if (discordId) {
+        // check if invoker exists in database
+        const querySnapshot = await firestoreDb
+          .collection('users')
+          .where('discordId', '==', invoker).get()
+        const documentSnapshot = querySnapshot.docs.map((r) => {
+          return r.data() as Omit<UserT, 'id'>
+        })
+
+        const userRegistered = documentSnapshot[0]
+        if (userRegistered) {
           interactionReply("You're already registered!", res)
           return
         }
