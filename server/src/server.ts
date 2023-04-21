@@ -9,6 +9,7 @@ import {
   GITHUB_CLIENT_SECRET,
   GITHUB_PRIVATE_KEY,
 } from './secrets.js'
+import { currentHost } from './shared.js'
 
 export function createServer() {
   const server = fastify()
@@ -41,7 +42,7 @@ export function createServer() {
       auth: oauthPlugin.fastifyOauth2.DISCORD_CONFIGURATION,
     },
     startRedirectPath: '/login/discord',
-    callbackUri: 'http://localhost:3000/auth/discord',
+    callbackUri: `${currentHost}/auth/discord`,
   })
   server.register(oauthPlugin, {
     name: 'githubAuth',
@@ -53,7 +54,7 @@ export function createServer() {
       auth: oauthPlugin.fastifyOauth2.GITHUB_CONFIGURATION,
     },
     startRedirectPath: '/login/github',
-    callbackUri: 'http://localhost:3000/auth/github',
+    callbackUri: `${currentHost}/auth/github`,
   })
   server.register(authRoutes, {
     prefix: '/auth',
