@@ -9,8 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/cache": "^11.10.7",
     "@emotion/react": "^11.10.6",
+    "@emotion/serialize": "^1.1.1",
     "@emotion/styled": "^11.10.6",
+    "@emotion/use-insertion-effect-with-fallbacks": "^1.0.0",
+    "@emotion/weak-memoize": "^0.3.0",
     "@radix-ui/react-dialog": "^1.0.3",
     "@swc/plugin-emotion": "^2.5.56",
     "@types/luxon": "^3.2.0",
