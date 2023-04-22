@@ -201,11 +201,11 @@ export default function discordInteractionsHandler(
             res
           )
         }
-        if (!experiences || experiences.find((ex) => ex === -1)) {
+        if (!experiences?.length || experiences.find((ex) => ex === -1)) {
           return interactionReply('Invalid experience level supplied', res)
         }
         if (
-          !timezones ||
+          !timezones?.length ||
           timezones.find((ex) => ex !== 'NA' && ex !== 'EU' && ex !== 'Asia')
         ) {
           return interactionReply('Invalid timezones supplied', res)

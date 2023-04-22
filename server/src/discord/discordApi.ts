@@ -20,7 +20,7 @@ const teamsSection = async () => {
   const c2 = 15
   const c3 = 15
   const c4 = 30
-  const lfmLines = teams
+  const lfmLines = teams.length
     ? teams
         .map(
           (t) =>
@@ -29,10 +29,13 @@ const teamsSection = async () => {
             ).padEnd(c2)}${expText(t.lfm.experience).padEnd(c3)}${leaders
               .filter((l) => l.team === t.id)
               .join(',')
-              .padEnd(c4 - 1)}>\n`
+              .padEnd(c4 - 1)}>\n  ${t.lfm.blurb}\n`
         )
         .join('')
     : '  (no teams currently looking for members)'
+
+  console.log(teams)
+  console.log(lfmLines)
   const hash = '#'.repeat(c1 + c2 + c3 + c4)
   const eq = '='.repeat(c1 + c2 + c3 + c4)
   const md = '```markdown'
@@ -60,13 +63,13 @@ const usersSection = async () => {
   const c3 = 15
   const exp = (user: UserT) =>
     user.experience === 1 ? 'beg' : user.experience === 2 ? 'int' : 'adv'
-  const lfmLines = users
+  const lfmLines = users.length
     ? users
         .map(
           (u) =>
             `<${u.name.padEnd(c1 - 1)}${u.timezone.padEnd(c2)}${exp(u).padEnd(
               c3 - 1
-            )}>\n`
+            )}>\n  ${u.lft.blurb}\n`
         )
         .join('')
     : '  (no users currently looking for teams)'
