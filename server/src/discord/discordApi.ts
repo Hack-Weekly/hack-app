@@ -157,10 +157,10 @@ ${await teamsSection()}${await usersSection()}
   async updateLFGpost() {
     try {
       return await this._updateLFGpost()
-    } catch(e) {
+    } catch (e) {
       console.log(`Failed to update LFG post: ${e}`)
     }
+  }
 }
-
 
 export const discordApi = new DiscordApi()
