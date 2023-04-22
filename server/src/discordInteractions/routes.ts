@@ -171,7 +171,40 @@ export default function discordInteractionsHandler(
         interactionReply('bar', res)
         return
       }
+      if (body.data.name === 'lfm') {
+        const blurb = (body.data as any).options.find(
+          (o) => o.name === 'blurb'
+        )?.value
 
+        if (!blurb) {
+          return interactionReply(
+            "Provide a short (<60 char)  description of your skillset or what type of team you're looking for",
+            res
+          )
+        }
+
+        // Make sure this user is actually registered
+        const users = await firebaseApi.getUsers()
+
+        const user = users.find((u) => u.discordId === invoker)
+        if (!user) {
+          return interactionReply(
+            "You aren't in our database - please run '/register' first",
+            res
+          )
+        }
+        if (!user.teamLead) {
+          return interactionReply('Only team leads can mark team as lfm', res)
+        }
+        const teams = await firebaseApi.getTeams()
+
+        const team = teams.find((t) => t.id === user.team)
+
+        team.lfm = { blurb }
+        await firebaseApi.updateTeam(team)
+        interactionReply("Set team as 'Looking for members'", res)
+        await discordApi.updateLFGpost()
+      }
       if (body.data.name === 'lft') {
         const blurb = (body.data as any).options.find(
           (o) => o.name === 'blurb'
@@ -197,7 +230,8 @@ export default function discordInteractionsHandler(
 
         user.lft = { blurb }
         await firebaseApi.updateUser(user)
-        return interactionReply("Set user as 'Looking for team'", res)
+        interactionReply("Set user as 'Looking for team'", res)
+        await discordApi.updateLFGpost()
       }
       // Register new user
       if (body.data.name === 'register') {
@@ -223,6 +257,9 @@ export default function discordInteractionsHandler(
         // Derive team from discord
         const teams = await firebaseApi.getTeams()
         const curTeam = teams.find((t) => invokerRoles.includes(t.discordRole))
+        const teamLead = invokerRoles.includes(
+          hackWeeklyDiscord.specialRoles.teamLead
+        )
 
         const newUser: UserT = {
           id: '',
@@ -232,13 +269,13 @@ export default function discordInteractionsHandler(
           name: member.user.username,
           tech: {},
           team: curTeam.id,
+          teamLead,
           lft: null,
         }
 
         await firebaseApi.addUser(newUser)
 
         interactionReply(`User created!`, res)
-        await discordApi.updateLFGpost()
         return
       }
 

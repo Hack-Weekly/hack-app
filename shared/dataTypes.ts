@@ -21,6 +21,7 @@ export interface UserT {
   experience: number; // 1-5
   tech: { [key: string]: number };
   team: TeamIdT;
+  teamLead: boolean;
   lft: null | { blurb: string };
 }
 export interface TeamT {
