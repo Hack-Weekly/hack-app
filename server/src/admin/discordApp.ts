@@ -19,6 +19,11 @@ const commands: DiscordAppCommand[] = [
     description: 'Leave your current team',
     type: ApplicationCommandType.ChatInput,
   },
+  {
+    name: 'register',
+    description: 'Register with Hack Weekly',
+    type: ApplicationCommandType.ChatInput,
+  },
 ]
 
 export const hackWeeklyDiscordApp = {
