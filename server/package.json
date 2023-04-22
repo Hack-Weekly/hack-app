@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "nodemon --watch './src/**/*.ts' --watch '../shared/**/*.ts' --exec ts-node -r dotenv/config -T ./src/index.ts",
-    "prod": "ts-node -T ./src/index.ts",
+    "prod": "node ./dist/src/index.js",
     "build": "tsc",
     "test": "jest --coverage",
     "test:watch": "npm run test -- --watchAll",
