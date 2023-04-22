@@ -51,6 +51,19 @@ const commands: DiscordAppCommand[] = [
     ],
   },
   {
+    name: 'lfm',
+    description: 'Signify that your team is looking for members',
+    type: ApplicationCommandType.ChatInput,
+    options: [
+      {
+        name: 'blurb',
+        description: "A short (60 char) description of your team's tech stack",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
+  },
+  {
     name: 'leaveteam',
     description: 'Leave your current team',
     type: ApplicationCommandType.ChatInput,

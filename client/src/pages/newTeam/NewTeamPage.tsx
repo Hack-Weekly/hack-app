@@ -31,7 +31,6 @@ export const NewTeamPage: FC = () => {
       name,
       icon,
       discordRole: discordName,
-      members: [],
       repos: [],
     };
 

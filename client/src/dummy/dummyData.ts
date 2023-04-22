@@ -37,7 +37,6 @@ export const dummyTeams: TeamT[] = [
   {
     id: "t_stark",
     name: "Stark",
-    members: dummyUsers.filter((u) => u.team === "stark").map((u) => u.id),
     discordRole: "Stark Team",
     icon: "",
     repos: [],

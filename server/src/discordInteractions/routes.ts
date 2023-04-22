@@ -121,7 +121,6 @@ export default function discordInteractionsHandler(
         name: localTeam.name,
         discordRole: localTeam.discordTeamId,
         icon: '',
-        members: [],
         repos: [],
         githubTeam: localTeam.githubTeamId,
         defaultDiscordChannel: localTeam.defaultChannel,

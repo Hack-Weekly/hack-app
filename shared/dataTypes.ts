@@ -29,7 +29,6 @@ export interface TeamT {
   name: string;
   icon: string;
   repos: Array<RepoIdT>;
-  members: Array<UserIdT>;
   discordRole: string;
   githubTeam: string;
   defaultDiscordChannel: string;
