@@ -78,6 +78,7 @@ export default function authRoutes(server: FastifyInstance, options, done) {
       tech: {},
       lft: null,
       teamLead: false,
+      timezone: 'NA', // TODO: can we do better?
     }
     const usersCol = firestoreDb.collection('users')
     await usersCol.add(user)
