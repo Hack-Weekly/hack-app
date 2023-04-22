@@ -36,11 +36,19 @@ const commands: DiscordAppCommand[] = [
     ],
   },
   {
-    // TODO: implement handler for this
     name: 'lft',
     description:
       'Signify that you are looking for a team (/leaveteam before doing this)',
     type: ApplicationCommandType.ChatInput,
+    options: [
+      {
+        name: 'blurb',
+        description:
+          "A short (60 char) description of your skillset/what you're looking for",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
   },
   {
     name: 'leaveteam',
@@ -51,6 +59,14 @@ const commands: DiscordAppCommand[] = [
     name: 'register',
     description: 'Register with Hack Weekly',
     type: ApplicationCommandType.ChatInput,
+    options: [
+      {
+        name: 'githubid',
+        description: "Your current Github ID (e.g., 'rollie42')",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+    ],
   },
 ]
 

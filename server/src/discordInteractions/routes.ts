@@ -117,6 +117,7 @@ export default function discordInteractionsHandler(
 
     for (const localTeam of teamsToAdd) {
       const team: TeamT = {
+        id: '',
         name: localTeam.name,
         discordRole: localTeam.discordTeamId,
         icon: '',
@@ -162,34 +163,83 @@ export default function discordInteractionsHandler(
 
     // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
     // Resolve the calling user
-    const invoker = body.member.user.id
-    const invokerRoles = body.member.roles
+    const member = body.member
+    const invoker = member.user.id
+    const invokerRoles = member.roles
     if (body.type === InteractionType.ApplicationCommand) {
       if (body.data.name === 'foo') {
         interactionReply('bar', res)
         return
       }
 
+      if (body.data.name === 'lft') {
+        const blurb = (body.data as any).options.find(
+          (o) => o.name === 'blurb'
+        )?.value
+
+        if (!blurb) {
+          return interactionReply(
+            "Provide a short (<60 char)  description of your skillset or what type of team you're looking for",
+            res
+          )
+        }
+
+        // Make sure this user is actually registered
+        const users = await firebaseApi.getUsers()
+
+        const user = users.find((u) => u.discordId === invoker)
+        if (!user) {
+          return interactionReply(
+            "You aren't in our database - please run '/register' first",
+            res
+          )
+        }
+
+        user.lft = { blurb }
+        await firebaseApi.updateUser(user)
+        return interactionReply("Set user as 'Looking for team'", res)
+      }
       // Register new user
       if (body.data.name === 'register') {
-        // check if invoker exists in database
-        const querySnapshot = await firestoreDb
-          .collection('users')
-          .where('discordId', '==', invoker)
-          .get()
-        const documentSnapshot = querySnapshot.docs.map((r) => {
-          return r.data() as Omit<UserT, 'id'>
-        })
+        const githubId = (body.data as any).options.find(
+          (o) => o.name === 'githubid'
+        )?.value
 
-        const userRegistered = documentSnapshot[0]
-        if (userRegistered) {
+        if (!githubId) {
+          interactionReply('Supplied github id invalid', res)
+          return
+        }
+
+        const users = await firebaseApi.getUsers()
+
+        const existingUser = users.find(
+          (u) => u.discordId === invoker || u.githubId === githubId
+        )
+        if (existingUser) {
           interactionReply("You're already registered!", res)
           return
         }
-        interactionReply(
-          `To register, navigate to ${currentHost}/auth/register`,
-          res
-        )
+
+        // Derive team from discord
+        const teams = await firebaseApi.getTeams()
+        const curTeam = teams.find((t) => invokerRoles.includes(t.discordRole))
+
+        const newUser: UserT = {
+          id: '',
+          discordId: invoker,
+          experience: 1,
+          githubId,
+          name: member.user.username,
+          tech: {},
+          team: curTeam.id,
+          lft: null,
+        }
+
+        await firebaseApi.addUser(newUser)
+
+        interactionReply(`User created!`, res)
+        await discordApi.updateLFGpost()
+        return
       }
 
       // Handle /leaveteam Command
