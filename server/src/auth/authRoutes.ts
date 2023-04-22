@@ -68,7 +68,7 @@ export default function authRoutes(server: FastifyInstance, options, done) {
     const discordUser = await discordApi.getUserData()
     console.log(discordUser)
 
-    const user: Omit<UserT, 'id'> = {
+    const user: UserT = {
       name: discordUser.username,
       discordId: discordUser.id,
       githubId: githubUser.login,

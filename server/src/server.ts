@@ -10,6 +10,7 @@ import {
   GITHUB_PRIVATE_KEY,
 } from './secrets.js'
 import { currentHost } from './shared.js'
+import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
 
 export function createServer() {
   const server = fastify()
@@ -36,7 +37,7 @@ export function createServer() {
     scope: ['identify'],
     credentials: {
       client: {
-        id: '1092652146077487175',
+        id: hackWeeklyDiscord.botId,
         secret: DISCORD_APP_PRIVATE_KEY,
       },
       auth: oauthPlugin.fastifyOauth2.DISCORD_CONFIGURATION,

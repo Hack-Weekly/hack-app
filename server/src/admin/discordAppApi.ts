@@ -29,6 +29,7 @@ class DiscordAppApi {
 
   async AddAllCommands() {
     for (const cmd of hackWeeklyDiscordApp.commands) {
+      console.log(`Registering cmd "${cmd.name}"`)
       const res = await this.AddCommand(cmd)
       console.log(res)
     }
