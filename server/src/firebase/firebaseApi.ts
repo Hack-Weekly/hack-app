@@ -6,7 +6,7 @@ class FirebaseApi {
     const col = firestoreDb.collection(colName)
     const refs = await col.listDocuments()
     const snapshots = await Promise.all(refs.map((t) => t.get()))
-    return snapshots.map((sn) => sn.data() as T)
+    return snapshots.map((sn) => ({ id: sn.id, ...sn.data() } as T))
   }
   async getUsers() {
     return this.getRecords<UserT>('users')
@@ -43,6 +43,11 @@ class FirebaseApi {
     const team = { ..._team }
     delete team.id
     return firestoreDb.collection('teams').add(team)
+  }
+  updateTeam(_team: TeamT) {
+    const team = { ..._team }
+    delete team.id
+    return firestoreDb.collection('teams').doc(_team.id).update(team)
   }
 }
 
