@@ -61,6 +61,20 @@ const commands: DiscordAppCommand[] = [
         type: ApplicationCommandOptionType.String,
         required: true,
       },
+      {
+        name: 'experience',
+        description:
+          "Comma separated list of experience levels you're looking for. Ex: 'beg', 'int,adv', etc",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: 'timezone',
+        description:
+          "Comma separated list of regional timezones you're looking for. Ex: 'NA', 'EU,Asia', etc",
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
     ],
   },
   {

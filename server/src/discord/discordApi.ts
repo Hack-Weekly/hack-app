@@ -1,27 +1,38 @@
 import { hackWeeklyDiscord } from './hackWeeklyDiscord.js'
 import { teamList } from '../teams.js'
 import { discordRestApi } from './discordRestApi.js'
+import { firebaseApi } from '../firebase/firebaseApi.js'
+import { UserT } from 'shared'
 
-const teamsSection = (lfm: any[]) => {
+const teamsSection = async () => {
+  const teams = (await firebaseApi.getTeams()).filter((t) => t.lfm)
+  const leaders = (await firebaseApi.getUsers()).filter((u) => u.teamLead)
   const regionText = (regions: string[]) =>
     regions.length === 3 ? 'any' : regions.join(',')
-  const expText = (exps: string[]) =>
-    exps.length === 3 ? 'any' : exps.join(',')
+  const expText = (exps: number[]) =>
+    exps.length === 3
+      ? 'any'
+      : exps
+          .map((ex) => (ex === 1 ? 'beg' : ex === 2 ? 'int' : 'adv'))
+          .join(',')
 
   const c1 = 25
   const c2 = 15
   const c3 = 15
   const c4 = 30
-  const lfmLines = lfm
-    .map(
-      (t) =>
-        `<${t.team.replace(' ', '-').padEnd(c1 - 1)}${regionText(
-          t.timezones
-        ).padEnd(c2)}${expText(t.exp).padEnd(c3)}${t.leaders
-          .join(',')
-          .padEnd(c4 - 1)}>\n`
-    )
-    .join('')
+  const lfmLines = teams
+    ? teams
+        .map(
+          (t) =>
+            `<${t.name.replace(' ', '-').padEnd(c1 - 1)}${regionText(
+              t.lfm.timezones
+            ).padEnd(c2)}${expText(t.lfm.experience).padEnd(c3)}${leaders
+              .filter((l) => l.team === t.id)
+              .join(',')
+              .padEnd(c4 - 1)}>\n`
+        )
+        .join('')
+    : '  (no teams currently looking for members)'
   const hash = '#'.repeat(c1 + c2 + c3 + c4)
   const eq = '='.repeat(c1 + c2 + c3 + c4)
   const md = '```markdown'
@@ -41,18 +52,24 @@ ${mdEnd}`
   return postContent
 }
 
-const usersSection = (lfg: any[]) => {
+const usersSection = async () => {
+  const users = (await firebaseApi.getUsers()).filter((u) => u.lft)
+
   const c1 = 25
   const c2 = 15
   const c3 = 15
-  const lfmLines = lfg
-    .map(
-      (u) =>
-        `<${u.name.padEnd(c1 - 1)}${u.timezone.padEnd(c2)}${u.exp.padEnd(
-          c3 - 1
-        )}>\n`
-    )
-    .join('')
+  const exp = (user: UserT) =>
+    user.experience === 1 ? 'beg' : user.experience === 2 ? 'int' : 'adv'
+  const lfmLines = users
+    ? users
+        .map(
+          (u) =>
+            `<${u.name.padEnd(c1 - 1)}${u.timezone.padEnd(c2)}${exp(u).padEnd(
+              c3 - 1
+            )}>\n`
+        )
+        .join('')
+    : '  (no users currently looking for teams)'
   const hash = '#'.repeat(c1 + c2 + c3)
   const eq = '='.repeat(c1 + c2 + c3)
   const md = '```markdown'
@@ -115,67 +132,8 @@ class DiscordApi {
   }
 
   async updateLFGpost() {
-    const lfm = [
-      {
-        team: 'Lavender snake',
-        exp: ['beg', 'int'],
-        timezones: ['Asia', 'EU'],
-        leaders: ['SuperKebbit'],
-      },
-      {
-        team: 'Crimson eagle',
-        exp: ['int'],
-        timezones: ['NA'],
-        leaders: ['FrolickingMustelid', 'sydney'],
-      },
-      {
-        team: 'Indigo turtle',
-        exp: ['adv', 'int'],
-        timezones: ['NA', 'EU', 'Asia'],
-        leaders: ['Rollie'],
-      },
-    ]
-
-    const lfg = [
-      {
-        name: 'Bob',
-        exp: 'beg',
-        timezone: 'EU',
-      },
-      {
-        name: 'Bob',
-        exp: 'int',
-        timezone: 'EU',
-      },
-      {
-        name: 'Bob',
-        exp: 'adv',
-        timezone: 'Asia',
-      },
-      {
-        name: 'Bob',
-        exp: 'beg',
-        timezone: 'NA',
-      },
-      {
-        name: 'Bob',
-        exp: 'beg',
-        timezone: 'EU',
-      },
-      {
-        name: 'Bob',
-        exp: 'adv',
-        timezone: 'EU',
-      },
-      {
-        name: 'Bob',
-        exp: 'int',
-        timezone: 'Asia',
-      },
-    ]
-
     const postContent = `
-${teamsSection(lfm)}${usersSection(lfg)}
+${await teamsSection()}${await usersSection()}
 `
     const teamSearchMessages = await discordRestApi.GetMessages(
       hackWeeklyDiscord.lfgChannel

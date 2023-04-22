@@ -165,22 +165,52 @@ export default function discordInteractionsHandler(
     const member = body.member
     const invoker = member.user.id
     const invokerRoles = member.roles
+    const options = (body.data as any).options
     if (body.type === InteractionType.ApplicationCommand) {
       if (body.data.name === 'foo') {
         interactionReply('bar', res)
         return
       }
       if (body.data.name === 'lfm') {
-        const blurb = (body.data as any).options.find(
-          (o) => o.name === 'blurb'
-        )?.value
+        const blurb = options.find((o) => o.name === 'blurb')?.value
+        const experiences = options
+          .find((o) => o.name === 'experience')
+          ?.value?.toLowerCase()
+          ?.split(',')
+          ?.map((ex) =>
+            ex === 'beg' ? 1 : ex === 'int' ? '2' : ex === 'adv' ? 3 : -1
+          ) as number[]
+        const timezones = options
+          .find((o) => o.name === 'timezone')
+          ?.value?.toLowerCase()
+          ?.split(',')
+          ?.map((tz) =>
+            tz === 'na'
+              ? 'na'
+              : tz === 'eu'
+              ? 'EU'
+              : tz === 'asia'
+              ? 'Asia'
+              : 'Unknown'
+          )
 
+        // Check input params
         if (!blurb) {
           return interactionReply(
             "Provide a short (<60 char)  description of your skillset or what type of team you're looking for",
             res
           )
         }
+        if (!experiences || experiences.find((ex) => ex === -1)) {
+          return interactionReply('Invalid experience level supplied', res)
+        }
+        if (
+          !timezones ||
+          timezones.find((ex) => ex !== 'NA' && ex !== 'EU' && ex !== 'Asia')
+        ) {
+          return interactionReply('Invalid timezones supplied', res)
+        }
+        // Input params all check out
 
         // Make sure this user is actually registered
         const users = await firebaseApi.getUsers()
@@ -199,15 +229,17 @@ export default function discordInteractionsHandler(
 
         const team = teams.find((t) => t.id === user.team)
 
-        team.lfm = { blurb }
+        team.lfm = {
+          blurb,
+          experience: experiences,
+          timezones,
+        }
         await firebaseApi.updateTeam(team)
         interactionReply("Set team as 'Looking for members'", res)
         await discordApi.updateLFGpost()
       }
       if (body.data.name === 'lft') {
-        const blurb = (body.data as any).options.find(
-          (o) => o.name === 'blurb'
-        )?.value
+        const blurb = options.find((o) => o.name === 'blurb')?.value
 
         if (!blurb) {
           return interactionReply(
@@ -234,9 +266,7 @@ export default function discordInteractionsHandler(
       }
       // Register new user
       if (body.data.name === 'register') {
-        const githubId = (body.data as any).options.find(
-          (o) => o.name === 'githubid'
-        )?.value
+        const githubId = options.find((o) => o.name === 'githubid')?.value
 
         if (!githubId) {
           interactionReply('Supplied github id invalid', res)
@@ -260,16 +290,32 @@ export default function discordInteractionsHandler(
           hackWeeklyDiscord.specialRoles.teamLead
         )
 
+        let experience = 2
+        if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.beginner)) {
+          experience = 1
+        } else if (
+          invokerRoles.includes(hackWeeklyDiscord.specialRoles.advanced)
+        ) {
+          experience = 3
+        }
+
+        let timezone: any = 'NA'
+        if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.eu)) {
+          timezone = 'EU'
+        } else if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.asia)) {
+          timezone = 'Asia'
+        }
         const newUser: UserT = {
           id: '',
           discordId: invoker,
-          experience: 1,
+          experience,
           githubId,
           name: member.user.username,
           tech: {},
           team: curTeam.id,
           teamLead,
           lft: null,
+          timezone,
         }
 
         await firebaseApi.addUser(newUser)

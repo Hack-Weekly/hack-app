@@ -22,6 +22,7 @@ export interface UserT {
   tech: { [key: string]: number };
   team: TeamIdT;
   teamLead: boolean;
+  timezone: "NA" | "EU" | "Asia";
   lft: null | { blurb: string };
 }
 export interface TeamT {
@@ -32,7 +33,7 @@ export interface TeamT {
   discordRole: string;
   githubTeam: string;
   defaultDiscordChannel: string;
-  lfm: null | { blurb: string };
+  lfm: null | { blurb: string; timezones: string[]; experience: number[] };
 }
 export interface ProjectT {
   id: ProjectIdT;
