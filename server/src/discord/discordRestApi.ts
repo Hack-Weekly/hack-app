@@ -2,6 +2,10 @@
 
 import { hackWeeklyDiscord } from './hackWeeklyDiscord.js'
 import { DISCORD_BOT_PRIVATE_KEY } from '../secrets.js'
+import {
+  APIMessage,
+  RESTGetAPIChannelMessagesResult,
+} from 'discord-api-types/v10'
 
 // This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
@@ -32,12 +36,16 @@ class DiscordRestApi {
   constructor() {
     this.guildId = hackWeeklyDiscord.id
   }
-  async request(method: string, path: string) {
+  async request(method: string, path: string, body: any = undefined) {
+    const bodyObj = body ? { body: JSON.stringify(body) } : {}
+    console.log(bodyObj)
     const resp = await fetch(apiRoot + path, {
       method: method,
       headers: {
         Authorization: `Bot ${DISCORD_BOT_PRIVATE_KEY}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(body),
     })
 
     if (!resp.ok) {
@@ -69,6 +77,28 @@ class DiscordRestApi {
   }
   async RemoveRole(roleId: string, userId: string) {
     const path = `/guilds/${this.guildId}/members/${userId}/roles/${roleId}`
+    return await this.request('DELETE', path)
+  }
+
+  // Messaging
+  GetMessages(channelId: string) {
+    const path = `/channels/${channelId}/messages`
+    return this.request('GET', path) as Promise<APIMessage[]>
+  }
+  async MessageChannel(channelId: string, message: string) {
+    const path = `/channels/${channelId}/messages`
+    return await this.request('POST', path, {
+      content: message,
+    })
+  }
+  async EditMessage(channelId: string, messageId: string, newMessage: string) {
+    const path = `/channels/${channelId}/messages/${messageId}`
+    return await this.request('PATCH', path, {
+      content: newMessage,
+    })
+  }
+  async DeleteMessage(channelId: string, messageId: string) {
+    const path = `/channels/${channelId}/messages/${messageId}`
     return await this.request('DELETE', path)
   }
 }

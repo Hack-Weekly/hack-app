@@ -21,7 +21,10 @@ import {
 } from 'discord-api-types/v10'
 import { firestoreDb } from '../firebase.js'
 import { currentHost } from '../shared.js'
-import { UserT } from 'shared'
+
+import { TeamT, UserT } from 'shared'
+import { DateTime } from 'luxon'
+import { firebaseApi } from '../firebase/firebaseApi.js'
 
 const interactionReply = (message: string, resp: FastifyReply) => {
   resp.status(200).send({
@@ -80,6 +83,11 @@ export default function discordInteractionsHandler(
     reply.code(200).send(resp)
     return resp
   })
+  server.get('/discord/updateLFGpost', async (req, reply) => {
+    const resp = await discordApi.updateLFGpost()
+    reply.code(200).send(resp)
+    return resp
+  })
   // Helper route - register all our commands with discord (only do this when you update the commands)
   server.get('/register', async (req, reply) => {
     const res = await discordAppApi.AddAllCommands()
@@ -98,6 +106,29 @@ export default function discordInteractionsHandler(
       ret.push(data)
     }
     reply.code(200).send(ret)
+  })
+  // create firebase teams from static data
+  server.get('/firebase/createTeams', async (req, reply) => {
+    const currentTeams = await firebaseApi.getTeams()
+    const teamsToAdd = teamList.filter(
+      (t) => !currentTeams.find((fst) => fst.name === t.name)
+    )
+    console.log(teamsToAdd)
+
+    for (const localTeam of teamsToAdd) {
+      const team: TeamT = {
+        name: localTeam.name,
+        discordRole: localTeam.discordTeamId,
+        icon: '',
+        members: [],
+        repos: [],
+        githubTeam: localTeam.githubTeamId,
+        defaultDiscordChannel: localTeam.defaultChannel,
+        lfm: null,
+      }
+      await firebaseApi.addTeam(team)
+    }
+    reply.code(200).send('ok')
   })
   // The meat of this file - this does the verification and then handles the command
   server.post('/', async (req, res) => {
@@ -144,7 +175,8 @@ export default function discordInteractionsHandler(
         // check if invoker exists in database
         const querySnapshot = await firestoreDb
           .collection('users')
-          .where('discordId', '==', invoker).get()
+          .where('discordId', '==', invoker)
+          .get()
         const documentSnapshot = querySnapshot.docs.map((r) => {
           return r.data() as Omit<UserT, 'id'>
         })

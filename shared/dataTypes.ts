@@ -14,7 +14,6 @@ export type ImplementationIdT = string;
 export type RepoIdT = string;
 
 export interface UserT {
-  id: string;
   name: string;
   githubId: string;
   discordId: string;
@@ -23,27 +22,26 @@ export interface UserT {
   team: TeamIdT;
 }
 export interface TeamT {
-  id: string;
   name: string;
   icon: string;
   repos: Array<RepoIdT>;
   members: Array<UserIdT>;
   discordRole: string;
+  githubTeam: string;
+  defaultDiscordChannel: string;
+  lfm: null | { blurb: string };
 }
 export interface ProjectT {
-  id: ProjectIdT;
   description: string;
   startDate: Timestamp;
   endDate: Timestamp;
   implementations: Array<ImplementationIdT>;
 }
 export interface ParticipantContributionT {
-  userId: UserIdT;
   codeContributions: number;
   chatContributions: number;
 }
 export interface ImplementationT {
-  id: ImplementationIdT;
   teamId: TeamIdT;
   projectId: ProjectIdT;
   repoId: RepoIdT;
@@ -51,6 +49,5 @@ export interface ImplementationT {
   participantContribution: Array<ParticipantContributionT>;
 }
 export interface RepoT {
-  id: RepoIdT;
   path: string;
 }
