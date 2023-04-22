@@ -28,6 +28,7 @@ const teamsSection = async () => {
               t.lfm.timezones
             ).padEnd(c2)}${expText(t.lfm.experience).padEnd(c3)}${leaders
               .filter((l) => l.team === t.id)
+              .map((l) => l.name)
               .join(',')
               .padEnd(c4 - 1)}>\n  ${t.lfm.blurb}\n`
         )
