@@ -186,7 +186,7 @@ export default function discordInteractionsHandler(
           ?.split(',')
           ?.map((tz) =>
             tz === 'na'
-              ? 'na'
+              ? 'NA'
               : tz === 'eu'
               ? 'EU'
               : tz === 'asia'
