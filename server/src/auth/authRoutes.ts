@@ -69,12 +69,15 @@ export default function authRoutes(server: FastifyInstance, options, done) {
     console.log(discordUser)
 
     const user: UserT = {
+      id: '',
       name: discordUser.username,
       discordId: discordUser.id,
       githubId: githubUser.login,
       experience: 3,
       team: '',
       tech: {},
+      lft: null,
+      teamLead: false,
     }
     const usersCol = firestoreDb.collection('users')
     await usersCol.add(user)
