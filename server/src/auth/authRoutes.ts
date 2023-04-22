@@ -73,7 +73,7 @@ export default function authRoutes(server: FastifyInstance, options, done) {
       name: discordUser.username,
       discordId: discordUser.id,
       githubId: githubUser.login,
-      experience: 3,
+      experience: 1,
       team: '',
       tech: {},
       lft: null,

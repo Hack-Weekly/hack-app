@@ -178,7 +178,7 @@ export default function discordInteractionsHandler(
           ?.value?.toLowerCase()
           ?.split(',')
           ?.map((ex) =>
-            ex === 'beg' ? 1 : ex === 'int' ? '2' : ex === 'adv' ? 3 : -1
+            ex === 'beg' ? 1 : ex === 'int' ? 2 : ex === 'adv' ? 3 : -1
           ) as number[]
         const timezones = options
           .find((o) => o.name === 'timezone')

@@ -134,7 +134,7 @@ class DiscordApi {
     return await discordRestApi.EditMessage(channelId, messageId, newMessage)
   }
 
-  async updateLFGpost() {
+  private async _updateLFGpost() {
     const postContent = `
 ${await teamsSection()}${await usersSection()}
 `
@@ -153,6 +153,14 @@ ${await teamsSection()}${await usersSection()}
       postContent
     )
   }
+
+  async updateLFGpost() {
+    try {
+      return await this._updateLFGpost()
+    } catch(e) {
+      console.log(`Failed to update LFG post: ${e}`)
+    }
 }
+
 
 export const discordApi = new DiscordApi()
