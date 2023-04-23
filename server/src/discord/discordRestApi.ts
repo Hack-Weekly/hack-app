@@ -38,21 +38,24 @@ class DiscordRestApi {
   }
   async request(method: string, path: string, body: any = undefined) {
     const bodyObj = body ? { body: JSON.stringify(body) } : {}
-    console.log(bodyObj)
+    console.log(
+      `Calling ${method} ${path} with content ${JSON.stringify(bodyObj)}`
+    )
     const resp = await fetch(apiRoot + path, {
       method: method,
       headers: {
         Authorization: `Bot ${DISCORD_BOT_PRIVATE_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      ...bodyObj,
     })
 
     if (!resp.ok) {
-      console.log(resp)
+      console.log(`Call failed with ${resp}`)
       throw new Error(await resp.json())
     }
 
+    console.log('Call succeeded')
     return resp.status === 204 ? '{}' : await resp.json()
   }
   async getGuildMember(userId: string) {
