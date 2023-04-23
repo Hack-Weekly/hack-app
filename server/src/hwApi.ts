@@ -26,7 +26,7 @@ export class HWApi {
     return this.self(user) || this.admin() || this.teamLead(teamId)
   }
 
-  async addUserToTeam(user: UserT, team: TeamT) {
+  async addUserToTeam(user: UserT, team: TeamT, silent = false) {
     if (!this.admin() && !this.teamLead(team.id)) {
       return { error: `You don't have rights to perform this operation` }
     }
@@ -49,7 +49,9 @@ export class HWApi {
     await discordApi.addUserToTeam(user.discordId, team.discordRole)
     discordApi.updateLFGpost()
     const message = `Hi ${team.name} - you guys have a new member! Everyone please welcome <@${user.discordId}> :)`
-    discordApi.messageChannel(team.defaultDiscordChannel, message)
+    if (!silent) {
+      discordApi.messageChannel(team.defaultDiscordChannel, message)
+    }
 
     return { message: `Successfully added ${user.name} to ${team.name}` }
   }

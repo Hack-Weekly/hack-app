@@ -19,26 +19,6 @@ export const commands: DiscordAppCommand[] = [
   new LeaveTeamCommand(),
 ]
 
-// TODO: implement handler for this
-// name: 'setteam',
-// description: "Admin command to set a user's team",
-// type: ApplicationCommandType.ChatInput,
-// default_member_permissions: `0`,
-// options: [
-//   {
-//     name: 'user',
-//     description: 'The user whose team you wish to set',
-//     type: ApplicationCommandOptionType.User,
-//     required: true,
-//   },
-//   {
-//     name: 'team',
-//     description: 'The team to assign the selected user to',
-//     type: ApplicationCommandOptionType.Role,
-//     required: true,
-//   },
-// ],
-
 export const hackWeeklyDiscordApp = {
   id: hackWeeklyDiscord.botId,
   commands,
