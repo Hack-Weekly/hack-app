@@ -143,11 +143,11 @@ export default function discordInteractionsHandler(
           githubId,
           name: member.user.username,
           tech: {},
-          team: curTeam.id,
+          team: curTeam?.id,
           teamLead,
           lft: null,
           timezone,
-          admin: false,
+          admin: invokerRoles.includes(hackWeeklyDiscord.specialRoles.admin),
         }
 
         await firebaseApi.addUser(newUser)
