@@ -49,7 +49,7 @@
     "nacl": "^0.1.3",
     "octokit": "^2.0.14",
     "path": "^0.12.7",
-    "shared": "file:../shared",
+    "shared": "link:../shared",
     "socket.io": "^4.6.1"
   },
   "devDependencies": {

@@ -1,1 +1,1 @@
-docker build . -t hack-app-server -f Dockerfile.server
+docker build . -t hack-app-server -f Dockerfile.server --no-cache
