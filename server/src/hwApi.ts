@@ -37,6 +37,11 @@ export class HWApi {
       return { error: `User already on a team; ask them to '/leaveteam' first` }
     }
 
+    if (user.team) {
+      await this.removeUserFromTeam(user)
+      user.team = null
+    }
+
     // Firebase
     user.team = team.id
     user.lft = null
