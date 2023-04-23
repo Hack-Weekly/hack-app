@@ -143,7 +143,7 @@ export default function discordInteractionsHandler(
           githubId,
           name: member.user.username,
           tech: {},
-          team: curTeam?.id,
+          team: curTeam?.id ?? null,
           teamLead,
           lft: null,
           timezone,
