@@ -123,9 +123,13 @@ class DiscordApi {
     return await discordRestApi.RemoveRole(teamId, userId)
   }
   async removeUserFromTeams(userId: string, teamIds: string[]) {
-    const tasks = teamIds.map((teamId) =>
-      discordRestApi.RemoveRole(teamId, userId)
-    )
+    const tasks = teamIds.map((teamId) => {
+      try {
+        discordRestApi.RemoveRole(teamId, userId)
+      } catch (e) {
+        console.log(`Failed to remove from ${teamId}`)
+      }
+    })
     await Promise.all(tasks)
   }
   async messageChannel(channelId: string, message: string) {
