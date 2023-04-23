@@ -21,15 +21,6 @@ export default function testingHandler(server: FastifyInstance, options, done) {
     reply.code(200).send(resp)
     return resp
   })
-  // Github test
-  server.get('/github/add', async (req, reply) => {
-    const resp = await githubApi.addUserToTeam(
-      'rollie42',
-      '01_testing_create_team'
-    )
-    reply.code(200).send(resp)
-    return resp
-  })
   server.get('/github/remove', async (req, reply) => {
     const resp = await githubApi.removeUserFromTeam(
       'rollie42',
