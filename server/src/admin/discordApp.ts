@@ -10,6 +10,7 @@ import {
   LFMCommand,
   LFTCommand,
   RecruitCommand,
+  SetTeamCommand,
 } from './commands/index.js'
 
 export const commands: DiscordAppCommand[] = [
@@ -17,6 +18,7 @@ export const commands: DiscordAppCommand[] = [
   new RecruitCommand(),
   new LFTCommand(),
   new LeaveTeamCommand(),
+  new SetTeamCommand(),
 ]
 
 export const hackWeeklyDiscordApp = {
