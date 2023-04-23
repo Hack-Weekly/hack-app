@@ -43,7 +43,9 @@ export class SetTeamCommand extends AdminAppCommand {
       },
     ],
   } as Partial<APIApplicationCommand>
-  handler = async (invoker: UserT, { user, team, silent }) => {
+  handler = async (invoker: UserT, opts) => {
+    const { user, team, silent } = opts
+    console.log(opts)
     const targetUser = await firebaseApi.getUser({
       discordId: user,
     })

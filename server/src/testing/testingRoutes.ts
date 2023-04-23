@@ -1,3 +1,4 @@
+import { commands } from '@/admin/discordApp.js'
 import { discordApi } from '@/discord/discordApi.js'
 import { rollieId, hackWeeklyDiscord } from '@/discord/hackWeeklyDiscord.js'
 import { firestoreDb } from '@/firebase.js'
@@ -10,7 +11,8 @@ import { TeamT } from 'shared'
 export default function testingHandler(server: FastifyInstance, options, done) {
   // Test route
   server.get('', async (req, res) => {
-    res.code(200).send('working')
+    console.log(commands)
+    res.code(200).send(commands.map((c) => c.command))
   })
   // Github test
   server.get('/github/add', async (req, reply) => {
