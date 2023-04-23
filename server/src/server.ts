@@ -11,6 +11,7 @@ import {
 } from './secrets.js'
 import { currentHost } from './shared.js'
 import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
+import testingHandler from './testing/testingRoutes.js'
 
 export function createServer() {
   const server = fastify()
@@ -26,10 +27,6 @@ export function createServer() {
     origin: '*',
     methods: '*',
     allowedHeaders: '*',
-  })
-
-  server.register(discordInteractionsHandler, {
-    prefix: '/discordInteractions',
   })
 
   server.register(oauthPlugin, {
@@ -57,8 +54,15 @@ export function createServer() {
     startRedirectPath: '/login/github',
     callbackUri: `${currentHost}/auth/github`,
   })
+
   server.register(authRoutes, {
     prefix: '/auth',
+  })
+  server.register(discordInteractionsHandler, {
+    prefix: '/discordInteractions',
+  })
+  server.register(testingHandler, {
+    prefix: '/testing',
   })
 
   server.setErrorHandler((error, req, res) => {

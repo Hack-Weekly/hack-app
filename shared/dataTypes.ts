@@ -24,6 +24,7 @@ export interface UserT {
   teamLead: boolean;
   timezone: "NA" | "EU" | "Asia";
   lft: null | { blurb: string };
+  admin: boolean;
 }
 export interface TeamT {
   id: string;

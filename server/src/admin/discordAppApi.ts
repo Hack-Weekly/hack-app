@@ -2,12 +2,13 @@
 
 import { DISCORD_APP_PRIVATE_KEY, DISCORD_BOT_PRIVATE_KEY } from '../secrets.js'
 import { hackWeeklyDiscord } from '../discord/hackWeeklyDiscord.js'
-import { DiscordAppCommand, hackWeeklyDiscordApp } from './discordApp.js'
+import { hackWeeklyDiscordApp } from './discordApp.js'
+import { APIApplicationCommand } from 'discord-api-types/v10'
 
 // This is a wrapper around Discords API to modify an application - in our case, just adding/updating commands
 const apiRoot = `https://discord.com/api/v10/applications/${hackWeeklyDiscordApp.id}/`
 class DiscordAppApi {
-  async AddCommand(cmd: DiscordAppCommand) {
+  async AddCommand(cmd: Partial<APIApplicationCommand>) {
     const resp = await fetch(apiRoot + 'commands', {
       method: 'POST',
       headers: {
@@ -28,9 +29,9 @@ class DiscordAppApi {
   }
 
   async AddAllCommands() {
-    for (const cmd of hackWeeklyDiscordApp.commands.filter(
-      (c) => c.name === 'lfm'
-    )) {
+    for (const cmd of hackWeeklyDiscordApp.commands
+      .map((c) => c.definition)
+      .filter((c) => c.name === 'lfm')) {
       console.log(`Registering cmd "${cmd.name}"`)
       const res = await this.AddCommand(cmd)
       console.log(res)
