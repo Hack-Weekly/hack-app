@@ -63,6 +63,14 @@ export default function discordInteractionsHandler(
     reply.code(200).send(resp)
     return resp
   })
+  server.get('/discord/removeRoles', async (req, res) => {
+    await discordApi.removeUserFromTeams(rollieId, [
+      '1082092224327725136',
+      // If they are leaving their team, they don't keep team lead role
+      hackWeeklyDiscord.specialRoles.teamLead,
+    ])
+    return 'ok'
+  })
   server.get('/github/createTeam', async (req, reply) => {
     const resp = await githubApi.createTeam('001_badgers')
     reply.code(200).send(resp)
