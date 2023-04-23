@@ -84,11 +84,11 @@ export default function discordInteractionsHandler(
     if (body.type === InteractionType.ApplicationCommand) {
       for (const command of commands) {
         if (body.data.name === command.command) {
-          const res = await command.execute(body)
-          if (res.error) {
-            interactionReply(`Command failed with: '${res.error}'`, res)
+          const result = await command.execute(body)
+          if (result.error) {
+            interactionReply(`Command failed with: '${result.error}'`, res)
           } else {
-            interactionReply(`Success: ${res.message}`, res)
+            interactionReply(`Success: ${result.message}`, res)
           }
           return
         }
