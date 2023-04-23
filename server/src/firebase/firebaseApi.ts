@@ -45,9 +45,11 @@ class FirebaseApi {
   async getTeams() {
     return this.getRecords<TeamT>('teams')
   }
-  async getTeam(firebaseId) {
+  async getTeam(id) {
     const teams = await this.getRecords<TeamT>('teams')
-    return teams.find((t) => t.id === firebaseId)
+    return teams.find(
+      (t) => t.id === id || t.discordRole === id || t.githubTeam === id
+    )
   }
   async addTeam(_team: TeamT) {
     const team = { ..._team }
