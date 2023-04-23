@@ -30,6 +30,12 @@ export class HWApi {
     if (!this.admin() && !this.teamLead(team.id)) {
       return { error: `You don't have rights to perform this operation` }
     }
+    if (user.team === team.id) {
+      return { error: `User is already on that team` }
+    }
+    if (!this.admin() && user.team) {
+      return { error: `User already on a team; ask them to '/leaveteam' first` }
+    }
 
     // Firebase
     user.team = team.id
@@ -42,6 +48,8 @@ export class HWApi {
     // Discord
     await discordApi.addUserToTeam(user.discordId, team.discordRole)
     discordApi.updateLFGpost()
+    const message = `Hi ${team.name} - you guys have a new member! Everyone please welcome <@${user.discordId}> :)`
+    discordApi.messageChannel(team.defaultDiscordChannel, message)
 
     return { message: `Successfully added ${user.name} to ${team.name}` }
   }
