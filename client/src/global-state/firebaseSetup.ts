@@ -15,13 +15,6 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
-import {
-  dummyImplementations,
-  dummyProjects,
-  dummyRepos,
-  dummyTeams,
-  dummyUsers,
-} from "../dummy/dummyData";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBPOlLlSWGcUaAbviBCq1ge3j_LgHS8pUc",
@@ -56,18 +49,11 @@ async function clearCollection(collection: CollectionReference) {
   });
 }
 
-async function loadDataForCol(data: any[], col: CollectionReference) {
-  for (const d of data) {
-    setDoc(doc(db, col.id, d.id), d);
-  }
-}
-export async function loadDummyData() {
-  loadDataForCol(dummyUsers, usersCol);
-  loadDataForCol(dummyTeams, teamsCol);
-  loadDataForCol(dummyRepos, reposCol);
-  loadDataForCol(dummyProjects, projectsCol);
-  loadDataForCol(dummyImplementations, implementationsCol);
-}
+// async function loadDataForCol(data: any[], col: CollectionReference) {
+//   for (const d of data) {
+//     setDoc(doc(db, col.id, d.id), d);
+//   }
+// }
 
 export async function githubSignIn() {
   try {

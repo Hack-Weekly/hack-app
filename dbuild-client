@@ -1,0 +1,1 @@
+docker build . -t hack-app-client -f Dockerfile.client --no-cache

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { TeamT } from "../../data-types/dataTypes";
+import { TeamT } from "shared";
 import { useAppStore, useCurrentProject } from "../../global-state/globalState";
 import styles from "./HomePage.module.css";
 import Button from "../../components/Button/Button";

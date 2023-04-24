@@ -2,13 +2,7 @@ import {
   addDoc as firebaseAddDoc,
   CollectionReference,
 } from "firebase/firestore";
-import {
-  ImplementationT,
-  ProjectT,
-  RepoT,
-  TeamT,
-  UserT,
-} from "../data-types/dataTypes";
+import { ImplementationT, ProjectT, RepoT, TeamT, UserT } from "shared";
 import {
   implementationsCol,
   projectsCol,

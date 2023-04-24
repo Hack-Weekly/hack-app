@@ -1,11 +1,6 @@
 import { createContext, FC, useContext, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import {
-  ImplementationT,
-  ProjectT,
-  TeamT,
-  UserIdT,
-} from "../../data-types/dataTypes";
+import { ImplementationT, ProjectT, TeamT, UserIdT } from "shared";
 import { createTeam } from "../../global-state/firebaseApi";
 import {
   useAppStore,
@@ -26,12 +21,16 @@ export const NewTeamPage: FC = () => {
   const [result, setResult] = useState("");
 
   const create = async () => {
+    // TODO
     const team: TeamT = {
-      id: "", // this will be generated on server
+      id: "",
       name,
       icon,
       discordRole: discordName,
       repos: [],
+      githubTeam: "",
+      defaultDiscordChannel: "",
+      lfm: null,
     };
 
     try {

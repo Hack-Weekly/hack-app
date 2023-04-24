@@ -1,17 +1,13 @@
 import { createContext, FC, useContext } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import {
-  ImplementationT,
-  ProjectT,
-  TeamT,
-  UserIdT,
-} from "../../data-types/dataTypes";
+import { ImplementationT, ProjectT, TeamT, UserIdT, UserT } from "shared";
 import {
   useAppStore,
   useCurrentProject,
   useProject,
   useTeam,
   useUser,
+  useUsers,
 } from "../../global-state/globalState";
 import styles from "./TeamPage.module.css";
 import Button from "../../components/Button/Button";
@@ -19,20 +15,22 @@ import Button from "../../components/Button/Button";
 const TeamContext = createContext<TeamT>({} as any);
 const useCurTeam = () => useContext(TeamContext);
 
-const Member: FC<{ userId: UserIdT }> = ({ userId }) => {
-  const user = useUser(userId);
+const Member: FC<{ user: UserT }> = ({ user }) => {
   return <div>{user?.name}</div>;
 };
 
 const MembersPanel: FC = () => {
   const curTeam = useCurTeam();
+  const members = Object.values(useUsers()).filter(
+    (u) => u.team === curTeam.id
+  );
 
   return (
     <div className={styles.root}>
       <div>Members</div>
       <div>
-        {curTeam.members.map((m) => (
-          <Member key={m} userId={m} />
+        {members.map((m) => (
+          <Member key={m.id} user={m} />
         ))}
       </div>
     </div>

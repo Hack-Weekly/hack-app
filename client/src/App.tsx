@@ -6,7 +6,6 @@ import ReactDOM from "react-dom/client";
 import {
   clearAllData,
   implementationsCol,
-  loadDummyData,
   projectsCol,
   reposCol,
   teamsCol,
@@ -19,7 +18,7 @@ import {
   useTeam,
   useUsers,
 } from "./global-state/globalState";
-import { UserT } from "./data-types/dataTypes";
+import { UserT } from "shared";
 import { HomePage } from "./pages/home/HomePage";
 import { RouterProvider } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
@@ -84,16 +83,6 @@ function App() {
 
   return (
     <div>
-      <button
-        style={{
-          position: "fixed",
-          right: "20px",
-          bottom: "20px",
-        }}
-        onClick={() => clearAllData().then(loadDummyData)}
-      >
-        Re-image database
-      </button>
       <RouterProvider router={router} />
     </div>
   );

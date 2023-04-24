@@ -2,24 +2,29 @@
 FROM node:19-alpine as build
 ENV NODE_VERSION 19.7.0
 WORKDIR /app
-COPY ./package*.json ./
+COPY ./package.json ./
+COPY ./pnpm-lock.yaml ./
+COPY ./pnpm-workspace.yaml ./
+COPY ./client/package.json ./client/
+COPY ./shared/package.json ./shared/
 ENV PATH /app/node_modules/.bin:$PATH
 
-# build shared
-WORKDIR /app/shared
-COPY ./shared/package*.json ./
-RUN npm ci 
-WORKDIR /app
-COPY ./shared ./shared
-RUN npm run shared-build
+# Update npm | Install pnpm | Set PNPM_HOME | Install global packages
+RUN npm i -g npm@latest; \
+ # Install pnpm
+ npm install -g pnpm; \
+ pnpm --version; \
+ pnpm setup; \
+ mkdir -p /usr/local/share/pnpm &&\
+ export PNPM_HOME="/usr/local/share/pnpm" &&\
+ export PATH="$PNPM_HOME:$PATH"; \
+ pnpm bin -g &&\
+ # Install dependencies
+ pnpm add -g pm2 &&\
+ pnpm install
 
-# build client
-WORKDIR /app/client
-COPY ./client/package*.json ./
-RUN npm ci 
-WORKDIR /app
-COPY ./client ./client
-RUN npm run client-build
+COPY . .
+RUN pnpm --filter client run build
 
 # production environment
 FROM nginx:stable-alpine

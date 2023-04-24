@@ -14,11 +14,9 @@ import {
   TeamT,
   UserIdT,
   UserT,
-} from "../data-types/dataTypes";
+} from "shared";
 
 export const useCurrentUser = create<UserT | undefined>((set) => undefined);
-export const useUsers = create<Record<string, UserT>>((set) => ({}));
-export const useTeams = create<Record<string, TeamT>>((set) => ({}));
 
 interface AppStore {
   users: UserT[];
@@ -74,11 +72,12 @@ export const useCurrentProject = () => {
   });
 };
 
+export const useTeams = () => useAppStore((state) => state.teams);
 export const useTeam = (id: TeamIdT) => {
   const teams = useAppStore((state) => state.teams);
   return teams.find((t) => t.id === id);
 };
-
+export const useUsers = () => useAppStore((state) => state.users);
 export const useUser = (id: UserIdT) => {
   const users = useAppStore((state) => state.users);
   return users.find((u) => u.id === id);
@@ -88,4 +87,3 @@ export const useProject = (id: ProjectIdT) => {
   const projects = useAppStore((state) => state.projects);
   return projects.find((p) => p.id === id);
 };
-

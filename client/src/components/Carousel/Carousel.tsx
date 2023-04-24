@@ -61,8 +61,6 @@ const Carousel: FC<CarouselProps> = ({ items }) => {
     for (let i = 0; i < progressBars; i++) {
       _progressBar.push(i);
     }
-    console.log("scrollIndex:", scrollIndex);
-    console.log("_progressBar:", _progressBar);
     return _progressBar.map((el, index) => (
       <span
         key={index}

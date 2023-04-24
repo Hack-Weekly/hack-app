@@ -28,6 +28,7 @@
     "react-query": "^3.39.3",
     "react-router": "^6.10.0",
     "react-router-dom": "^6.10.0",
+    "shared": "link:../shared",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
