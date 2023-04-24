@@ -150,7 +150,10 @@ export default function discordInteractionsHandler(
 
         await firebaseApi.addUser(newUser)
 
-        interactionReply(`User created!`, res)
+        interactionReply(
+          `Registration done! You may need to accept the github org invite, which can be done either from an email you received or from https://github.com/settings/organizations.`,
+          res
+        )
         return
       }
     }
