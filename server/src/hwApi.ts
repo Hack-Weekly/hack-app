@@ -44,6 +44,7 @@ export class HWApi {
 
     // Firebase
     user.team = team.id
+    const refreshLfg = !!user.lft
     user.lft = null
     await firebaseApi.updateUser(user)
 
@@ -52,9 +53,11 @@ export class HWApi {
 
     // Discord
     await discordApi.addUserToTeam(user.discordId, team.discordRole)
-    discordApi.updateLFGpost()
-    const message = `Hi ${team.name} - you guys have a new member! Everyone please welcome <@${user.discordId}> :)`
+    if (refreshLfg) {
+      discordApi.updateLFGpost()
+    }
     if (!silent) {
+      const message = `Hi ${team.name} - you guys have a new member! Everyone please welcome <@${user.discordId}> :)`
       discordApi.messageChannel(team.defaultDiscordChannel, message)
     }
 
@@ -88,13 +91,5 @@ export class HWApi {
     await firebaseApi.updateUser(user)
 
     return { message: `Successfully removed ${user.name} from ${team.name}` }
-  }
-}
-
-export const resolveUser = (identifier: { discordId?: string }) => {
-  if (identifier.discordId) {
-    return undefined // TODO
-  } else {
-    throw new Error('No identifier supplied')
   }
 }
