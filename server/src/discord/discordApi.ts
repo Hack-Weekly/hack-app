@@ -16,10 +16,10 @@ const teamsSection = async () => {
           .map((ex) => (ex === 1 ? 'beg' : ex === 2 ? 'int' : 'adv'))
           .join(',')
 
-  const c1 = 25
-  const c2 = 15
-  const c3 = 15
-  const c4 = 30
+  const c1 = 20
+  const c2 = 13
+  const c3 = 13
+  const c4 = 25
   const lfmLines = teams.length
     ? teams
         .map(
@@ -45,7 +45,7 @@ const teamsSection = async () => {
   const postContent = `${md}
 $> list teams --where lookingForMembers
 ${hash}
-${' Team name'.padEnd(c1)}${'Timezone(s)'.padEnd(c2)}${'Looking for'.padEnd(
+${' Team name'.padEnd(c1)}${'Timezones'.padEnd(c2)}${'Looking for'.padEnd(
     c3
   )}${'Leaders'.padEnd(c4)}
 ${eq}
@@ -59,9 +59,9 @@ ${mdEnd}`
 const usersSection = async () => {
   const users = (await firebaseApi.getUsers()).filter((u) => u.lft)
 
-  const c1 = 25
-  const c2 = 15
-  const c3 = 15
+  const c1 = 20
+  const c2 = 13
+  const c3 = 13
   const exp = (user: UserT) =>
     user.experience === 1 ? 'beg' : user.experience === 2 ? 'int' : 'adv'
   const lfmLines = users.length
