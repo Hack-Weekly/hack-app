@@ -63,6 +63,11 @@ export abstract class DiscordAppCommand {
     const invoker = await firebaseApi.getUser({
       discordId: payload.member.user.id,
     })
+    if (!invoker) {
+      return {
+        error: "Couldn't load your data - maybe you need to run /register?",
+      }
+    }
     return await this.handler(invoker, options)
   }
 }
