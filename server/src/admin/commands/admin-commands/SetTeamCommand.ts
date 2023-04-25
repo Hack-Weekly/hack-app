@@ -1,8 +1,4 @@
-import {
-  AdminAppCommand,
-  DiscordAppCommand,
-  TeamLeadAppCommand,
-} from '../DiscordAppCommand.js'
+import { RegisteredUserAppCommand } from '../DiscordAppCommand.js'
 import { discordApi } from '../../../discord/discordApi.js'
 import { firebaseApi } from '../../../firebase/firebaseApi.js'
 import {
@@ -14,7 +10,7 @@ import {
 import { UserT } from 'shared'
 import { HWApi } from '@/hwApi.js'
 
-export class SetTeamCommand extends AdminAppCommand {
+export class SetTeamCommand extends RegisteredUserAppCommand {
   valueOptions = { user: true, team: true, silent: true }
   listOptions = {}
   definition = {

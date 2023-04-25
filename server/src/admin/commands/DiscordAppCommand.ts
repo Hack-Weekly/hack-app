@@ -17,7 +17,7 @@ export abstract class DiscordAppCommand {
   abstract definition: Partial<APIApplicationCommand> // this is what gets registered to discord
   abstract valueOptions: Record<string, any>
   abstract listOptions: Record<string, any>
-  canAccess = (user: UserT) => true
+  checkAccess: (user: UserT) => true | { error: string } = (user: UserT) => true
   abstract handler: (user: UserT, options: any) => any
 
   get command() {
@@ -37,6 +37,9 @@ export abstract class DiscordAppCommand {
     const options = {
       targetUserDiscordId: (payload as APIUserApplicationCommandInteraction)
         .data.target_id,
+      invokerId: payload.member.user.id,
+      discordRolesIds: payload.member.roles,
+      discordName: payload.member.user.username,
     }
     for (const option of payloadOptions) {
       const valueHandler = this.valueOptions[option.name]
@@ -63,25 +66,19 @@ export abstract class DiscordAppCommand {
     const invoker = await firebaseApi.getUser({
       discordId: payload.member.user.id,
     })
-    if (!invoker) {
-      return {
-        error: "Couldn't load your data - maybe you need to run /register?",
-      }
+    const access = this.checkAccess(invoker)
+    if (access !== true) {
+      return access
     }
     return await this.handler(invoker, options)
   }
 }
 
 export abstract class RegisteredUserAppCommand extends DiscordAppCommand {
-  canAccess = (user: UserT) => !!user
-}
-
-export abstract class TeamLeadAppCommand extends DiscordAppCommand {
-  canAccess = (user: UserT) => user?.teamLead
-}
-
-export abstract class AdminAppCommand extends DiscordAppCommand {
-  canAccess = (user: UserT) => user?.admin
+  checkAccess = (user: UserT) =>
+    user
+      ? true
+      : { error: "Couldn't load your data - maybe you need to run /register?" }
 }
 
 const parseOptionList = (validValues: any, option: any) => {

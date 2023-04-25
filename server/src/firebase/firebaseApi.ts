@@ -20,9 +20,6 @@ class FirebaseApi {
     discordId?: string
     githubId?: string
   }) {
-    if ((firebaseId ? 1 : 0 + discordId ? 1 : 0 + githubId ? 1 : 0) !== 1) {
-      throw new Error('Supply exactly valid id')
-    }
     const users = await this.getUsers()
     return users.find(
       (u) =>

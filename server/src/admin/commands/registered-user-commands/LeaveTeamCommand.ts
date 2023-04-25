@@ -1,8 +1,4 @@
-import {
-  DiscordAppCommand,
-  RegisteredUserAppCommand,
-  TeamLeadAppCommand,
-} from '../DiscordAppCommand.js'
+import { RegisteredUserAppCommand } from '../DiscordAppCommand.js'
 import { discordApi } from '../../../discord/discordApi.js'
 import { firebaseApi } from '../../../firebase/firebaseApi.js'
 import {

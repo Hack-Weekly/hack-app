@@ -24,6 +24,7 @@ export interface UserT {
   timezone: "NA" | "EU" | "Asia";
   lft: null | { blurb: string };
   admin: boolean;
+  continueStatus?: "pending" | "confirmed";
 }
 export interface TeamT {
   id: string;

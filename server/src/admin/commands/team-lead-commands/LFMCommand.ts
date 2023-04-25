@@ -1,4 +1,4 @@
-import { DiscordAppCommand, TeamLeadAppCommand } from '../DiscordAppCommand.js'
+import { RegisteredUserAppCommand } from '../DiscordAppCommand.js'
 import { discordApi } from '../../../discord/discordApi.js'
 import { firebaseApi } from '../../../firebase/firebaseApi.js'
 import {
@@ -8,8 +8,9 @@ import {
   ApplicationCommandType,
 } from 'discord-api-types/v10'
 import { UserT } from 'shared'
+import { HWApi } from '@/hwApi.js'
 
-export class LFMCommand extends TeamLeadAppCommand {
+export class LFMCommand extends RegisteredUserAppCommand {
   valueOptions = { blurb: (b: any) => (b ? b : { error: 'Empty blurb found' }) }
   listOptions = {
     experience: { beg: 1, int: 2, adv: 3 },
@@ -48,14 +49,7 @@ export class LFMCommand extends TeamLeadAppCommand {
       return { error: `Couldn't load team '${invoker.team}'` }
     }
 
-    team.lfm = {
-      blurb,
-      experience: experience,
-      timezones: timezone,
-    }
-    await firebaseApi.updateTeam(team)
-    discordApi.updateLFGpost() // not awaiting - want to return quickly
-
-    return { message: 'Updated team LFM status' }
+    const hwApi = new HWApi(invoker)
+    return await hwApi.setLFM(team, blurb, experience, timezone)
   }
 }

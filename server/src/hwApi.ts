@@ -25,7 +25,54 @@ export class HWApi {
   private selfOrAdminOrTeamLead(user: UserT, teamId: string) {
     return this.self(user) || this.admin() || this.teamLead(teamId)
   }
+  async register(
+    discordId: string,
+    githubId: string,
+    discordName: string,
+    discordRolesIds: string[]
+  ) {
+    const existingUser = await firebaseApi.getUser({ discordId, githubId })
+    if (existingUser) {
+      return { error: 'User already exists' }
+    }
+    // Derive team from discord
+    const teams = await firebaseApi.getTeams()
+    const curTeam = teams.find((t) => discordRolesIds.includes(t.discordRole))
+    const teamLead = discordRolesIds.includes(
+      hackWeeklyDiscord.specialRoles.teamLead
+    )
 
+    let experience = 2
+    if (discordRolesIds.includes(hackWeeklyDiscord.specialRoles.beginner)) {
+      experience = 1
+    } else if (
+      discordRolesIds.includes(hackWeeklyDiscord.specialRoles.advanced)
+    ) {
+      experience = 3
+    }
+
+    let timezone: any = 'NA'
+    if (discordRolesIds.includes(hackWeeklyDiscord.specialRoles.eu)) {
+      timezone = 'EU'
+    } else if (discordRolesIds.includes(hackWeeklyDiscord.specialRoles.asia)) {
+      timezone = 'Asia'
+    }
+    const newUser: UserT = {
+      id: '',
+      discordId,
+      experience,
+      githubId,
+      name: discordName,
+      tech: {},
+      team: curTeam?.id ?? null,
+      teamLead,
+      lft: null,
+      timezone,
+      admin: discordRolesIds.includes(hackWeeklyDiscord.specialRoles.admin),
+    }
+
+    await firebaseApi.addUser(newUser)
+  }
   async addUserToTeam(user: UserT, team: TeamT, silent = false) {
     if (!this.admin() && !this.teamLead(team.id)) {
       return { error: `You don't have rights to perform this operation` }
@@ -91,5 +138,24 @@ export class HWApi {
     await firebaseApi.updateUser(user)
 
     return { message: `Successfully removed ${user.name} from ${team.name}` }
+  }
+  async setLFM(
+    team: TeamT,
+    blurb: string,
+    experience: number[],
+    timezone: string[]
+  ) {
+    if (!this.admin() && !this.teamLead(team.id)) {
+      return { error: `You don't have rights to perform this operation` }
+    }
+    team.lfm = {
+      blurb,
+      experience: experience,
+      timezones: timezone,
+    }
+    await firebaseApi.updateTeam(team)
+    discordApi.updateLFGpost() // not awaiting - want to return quickly
+
+    return { message: 'Updated team LFM status' }
   }
 }

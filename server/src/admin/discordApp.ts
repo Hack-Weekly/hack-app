@@ -6,10 +6,12 @@ import {
 } from 'discord-api-types/v10'
 import { DiscordAppCommand } from './commands/DiscordAppCommand.js'
 import {
+  ContinueCommand,
   LeaveTeamCommand,
   LFMCommand,
   LFTCommand,
   RecruitCommand,
+  RegisterCommand,
   RemoveFromTeamCommand,
   RemoveFromTeamSlashCommand,
   SetTeamCommand,
@@ -23,6 +25,8 @@ export const commands: DiscordAppCommand[] = [
   new LFTCommand(),
   new LeaveTeamCommand(),
   new SetTeamCommand(),
+  new ContinueCommand(),
+  new RegisterCommand(),
 ]
 
 export const hackWeeklyDiscordApp = {

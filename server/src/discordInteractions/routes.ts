@@ -74,11 +74,6 @@ export default function discordInteractionsHandler(
     }
 
     // See https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
-    // Resolve the calling user
-    const member = body.member
-    const invoker = member.user.id
-    const invokerRoles = member.roles
-    const options = (body.data as any).options
     if (body.type === InteractionType.ApplicationCommand) {
       for (const command of commands) {
         if (body.data.name === command.command) {
@@ -90,71 +85,6 @@ export default function discordInteractionsHandler(
           }
           return
         }
-      }
-      // This doesn't fit into the other command structure easily, so we'll just keep
-      // it here for now
-      if (body.data.name === 'register') {
-        // Register new user
-        const githubId = options.find((o) => o.name === 'githubid')?.value
-
-        if (!githubId) {
-          interactionReply('Supplied github id invalid', res)
-          return
-        }
-
-        const users = await firebaseApi.getUsers()
-
-        const existingUser = users.find(
-          (u) => u.discordId === invoker || u.githubId === githubId
-        )
-        if (existingUser) {
-          interactionReply("You're already registered!", res)
-          return
-        }
-
-        // Derive team from discord
-        const teams = await firebaseApi.getTeams()
-        const curTeam = teams.find((t) => invokerRoles.includes(t.discordRole))
-        const teamLead = invokerRoles.includes(
-          hackWeeklyDiscord.specialRoles.teamLead
-        )
-
-        let experience = 2
-        if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.beginner)) {
-          experience = 1
-        } else if (
-          invokerRoles.includes(hackWeeklyDiscord.specialRoles.advanced)
-        ) {
-          experience = 3
-        }
-
-        let timezone: any = 'NA'
-        if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.eu)) {
-          timezone = 'EU'
-        } else if (invokerRoles.includes(hackWeeklyDiscord.specialRoles.asia)) {
-          timezone = 'Asia'
-        }
-        const newUser: UserT = {
-          id: '',
-          discordId: invoker,
-          experience,
-          githubId,
-          name: member.user.username,
-          tech: {},
-          team: curTeam?.id ?? null,
-          teamLead,
-          lft: null,
-          timezone,
-          admin: invokerRoles.includes(hackWeeklyDiscord.specialRoles.admin),
-        }
-
-        await firebaseApi.addUser(newUser)
-
-        interactionReply(
-          `Registration done! You may need to accept the github org invite, which can be done either from an email you received or from https://github.com/settings/organizations.`,
-          res
-        )
-        return
       }
     }
     console.log(`Unknown command ${body.data}`)
