@@ -12,7 +12,7 @@ import { hackWeeklyDiscord } from '../../../discord/hackWeeklyDiscord.js'
 import { HWApi } from '../../../hwApi.js'
 
 export class ContinueCommand extends DiscordAppCommand {
-  valueOptions = { githubId: true }
+  valueOptions = { githubid: true }
   listOptions = {}
   definition = {
     name: 'continue',
@@ -20,7 +20,7 @@ export class ContinueCommand extends DiscordAppCommand {
     type: ApplicationCommandType.ChatInput,
     options: [
       {
-        name: 'githubId',
+        name: 'githubid',
         description: 'Your github ID',
         type: ApplicationCommandOptionType.String,
         required: true,
@@ -29,13 +29,13 @@ export class ContinueCommand extends DiscordAppCommand {
   } as Partial<APIApplicationCommand>
   handler = async (
     invoker: UserT,
-    { invokerId, githubId, discordName, discordRolesIds }
+    { invokerId, githubid, discordName, discordRolesIds }
   ) => {
     const hwApi = new HWApi(invoker)
     // This might fail because user already exists, which is fine
     const registerRes = await hwApi.register(
       invokerId,
-      githubId,
+      githubid,
       discordName,
       discordRolesIds
     )

@@ -12,7 +12,7 @@ import { hackWeeklyDiscord } from '../../../discord/hackWeeklyDiscord.js'
 import { HWApi } from '../../../hwApi.js'
 
 export class RegisterCommand extends DiscordAppCommand {
-  valueOptions = { githubId: true }
+  valueOptions = { githubid: true }
   listOptions = {}
   definition = {
     name: 'register',
@@ -20,7 +20,7 @@ export class RegisterCommand extends DiscordAppCommand {
     type: ApplicationCommandType.ChatInput,
     options: [
       {
-        name: 'githubId',
+        name: 'githubid',
         description: 'Your github ID',
         type: ApplicationCommandOptionType.String,
         required: true,
@@ -29,12 +29,12 @@ export class RegisterCommand extends DiscordAppCommand {
   } as Partial<APIApplicationCommand>
   handler = async (
     invoker: UserT,
-    { invokerId, githubId, discordName, discordRolesIds }
+    { invokerId, githubid, discordName, discordRolesIds }
   ) => {
     const hwApi = new HWApi(invoker)
     return await hwApi.register(
       invokerId,
-      githubId,
+      githubid,
       discordName,
       discordRolesIds
     )
