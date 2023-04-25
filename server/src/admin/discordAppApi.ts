@@ -31,7 +31,9 @@ class DiscordAppApi {
   async AddAllCommands() {
     for (const cmd of hackWeeklyDiscordApp.commands
       .map((c) => c.definition)
-      .filter((c) => c.name === 'setteam')) {
+      .filter(
+        (c) => c.name === 'RemoveFromTeam' || c.name === 'removefromteam'
+      )) {
       console.log(`Registering cmd "${cmd.name}"`)
       const res = await this.AddCommand(cmd)
       console.log(res)
