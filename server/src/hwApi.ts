@@ -72,6 +72,7 @@ export class HWApi {
     }
 
     await firebaseApi.addUser(newUser)
+    return { message: 'Registration complete' }
   }
   async addUserToTeam(user: UserT, team: TeamT, silent = false) {
     if (!this.admin() && !this.teamLead(team.id)) {
