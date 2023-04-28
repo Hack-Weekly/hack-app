@@ -71,7 +71,15 @@ export class HWApi {
       admin: discordRolesIds.includes(hackWeeklyDiscord.specialRoles.admin),
     }
 
-    await firebaseApi.addUser(newUser)
+    const addToTeam = async () => {
+      // Since user is registering, make sure they are assigned the appropriate github team
+      if (curTeam) {
+        await githubApi.addUserToTeam(newUser.githubId, curTeam.githubTeam)
+      }
+    }
+
+    await Promise.all([firebaseApi.addUser(newUser), addToTeam()])
+
     return { message: 'Registration complete' }
   }
   async addUserToTeam(user: UserT, team: TeamT, silent = false) {
