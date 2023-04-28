@@ -119,6 +119,12 @@ class DiscordApi {
   async addUserToTeam(userId: string, teamId: string) {
     return await discordRestApi.AddRole(teamId, userId)
   }
+  async addUserToMember(userId: string) {
+    return await discordRestApi.AddRole(
+      hackWeeklyDiscord.specialRoles.member,
+      userId
+    )
+  }
   async removeUserFromTeam(userId: string, teamId: string) {
     return await discordRestApi.RemoveRole(teamId, userId)
   }
