@@ -1,9 +1,11 @@
 import { commands } from '@/admin/discordApp.js'
 import { discordApi } from '@/discord/discordApi.js'
+import { discordRestApi } from '@/discord/discordRestApi.js'
 import { rollieId, hackWeeklyDiscord } from '@/discord/hackWeeklyDiscord.js'
 import { firestoreDb } from '@/firebase.js'
 import { firebaseApi } from '@/firebase/firebaseApi.js'
 import { githubApi } from '@/github/githubApi.js'
+import { HWApi } from '@/hwApi.js'
 import { teamList } from '@/teams.js'
 import { FastifyInstance } from 'fastify'
 import { TeamT } from 'shared'
@@ -100,6 +102,31 @@ export default function testingHandler(server: FastifyInstance, options, done) {
       await firebaseApi.addTeam(team)
     }
     reply.code(200).send('ok')
+  })
+  // create firebase users from discord's data
+  server.get('/genAllUsers', async (req, reply) => {
+    console.log('Getting firebase users')
+    const users = await firebaseApi.getUsers()
+    const teams = await firebaseApi.getTeams()
+    console.log('Getting discrod users')
+    const discordUsers = await discordRestApi.getGuildMembers()
+    const newDiscordUsers = discordUsers.filter(
+      (discordUser) => !users.some((u) => u.discordId === discordUser.user.id)
+    )
+
+    let res = '{ users: ['
+    for (const discordUser of newDiscordUsers) {
+      res += `"${discordUser.user.id}, ${discordUser.user.username}, ${discordUser.roles}",`
+      // await HWApi.register(
+      //   discordUser.user.id,
+      //   null as any,
+      //   discordUser.user.username,
+      //   discordUser.roles
+      // )
+    }
+    res += ']}'
+    console.log(res)
+    reply.code(200).send(res)
   })
   done()
 }

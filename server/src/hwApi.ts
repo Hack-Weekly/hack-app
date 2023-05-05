@@ -25,7 +25,7 @@ export class HWApi {
   private selfOrAdminOrTeamLead(user: UserT, teamId: string) {
     return this.self(user) || this.admin() || this.teamLead(teamId)
   }
-  async register(
+  static async register(
     discordId: string,
     githubId: string,
     discordName: string,
