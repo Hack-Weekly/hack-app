@@ -31,9 +31,8 @@ export class ContinueCommand extends DiscordAppCommand {
     invoker: UserT,
     { invokerId, githubid, discordName, discordRolesIds }
   ) => {
-    const hwApi = new HWApi(invoker)
     // This might fail because user already exists, which is fine
-    const registerRes = await hwApi.register(
+    const registerRes = await HWApi.register(
       invokerId,
       githubid,
       discordName,
