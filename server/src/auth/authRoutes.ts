@@ -4,11 +4,7 @@ import {
   discordRestApi,
   DiscordUserRestApi,
 } from '../discord/discordRestApi.js'
-import {
-  hackWeeklyDiscord,
-  rollieId,
-  testUserId,
-} from '../discord/hackWeeklyDiscord.js'
+import { hackWeeklyDiscord, rollieId } from '../discord/hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { teamList } from '../teams.js'
 import { discordApi } from '../discord/discordApi.js'

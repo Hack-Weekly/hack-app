@@ -1,11 +1,7 @@
 import { FastifyInstance, FastifyReply } from 'fastify'
 import { verifyKey } from 'discord-interactions'
 import { discordRestApi } from '../discord/discordRestApi.js'
-import {
-  hackWeeklyDiscord,
-  rollieId,
-  testUserId,
-} from '../discord/hackWeeklyDiscord.js'
+import { hackWeeklyDiscord, rollieId } from '../discord/hackWeeklyDiscord.js'
 import { discordAppApi } from '../admin/discordAppApi.js'
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
