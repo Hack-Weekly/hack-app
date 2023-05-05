@@ -217,8 +217,8 @@ removed from your team and need to be re-added if you wish to participate in fut
     const usersToRemove = users.filter(
       (u) => u.team && u.continueStatus === 'pending'
     )
-    // const tasks = usersToRemove.map((u) => this.removeUserFromTeam(u))
-    // await Promise.all(tasks)
+    const tasks = usersToRemove.map((u) => this.removeUserFromTeam(u))
+    await Promise.all(tasks)
 
     return { message: `Removed ${usersToRemove.length} users from teams` }
   }
