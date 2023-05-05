@@ -82,7 +82,9 @@ export class HWApi {
     }
 
     const addMemberDiscordRole = async () => {
-      await discordApi.addUserToMember(newUser.discordId)
+      if (!discordRolesIds.includes(hackWeeklyDiscord.specialRoles.member)) {
+        await discordApi.addUserToMember(newUser.discordId)
+      }
     }
 
     await Promise.all([
