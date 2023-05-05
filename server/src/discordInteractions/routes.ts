@@ -42,8 +42,9 @@ export default function discordInteractionsHandler(
   done
 ) {
   // Helper route - register all our commands with discord (only do this when you update the commands)
-  server.get('/register', async (req, reply) => {
-    const res = await discordAppApi.AddAllCommands()
+  server.get('/register/:command', async (req, reply) => {
+    const { command } = req.params as any
+    const res = await discordAppApi.AddCommandWithName(command)
     reply.code(200).send(res)
   })
   // The meat of this file - this does the verification and then handles the command
