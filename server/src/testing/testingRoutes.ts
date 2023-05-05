@@ -123,7 +123,6 @@ export default function testingHandler(server: FastifyInstance, options, done) {
         discordUser.user.username,
         discordUser.roles
       )
-      break
     }
     res += ']}'
     console.log(res)
