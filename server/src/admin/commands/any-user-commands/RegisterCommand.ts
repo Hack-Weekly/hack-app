@@ -31,8 +31,7 @@ export class RegisterCommand extends DiscordAppCommand {
     invoker: UserT,
     { invokerId, githubid, discordName, discordRolesIds }
   ) => {
-    const hwApi = new HWApi(invoker)
-    return await hwApi.register(
+    return await HWApi.register(
       invokerId,
       githubid,
       discordName,
