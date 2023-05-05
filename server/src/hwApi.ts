@@ -198,7 +198,7 @@ export class HWApi {
     const testTeam = (await firebaseApi.getTeams()).find(
       (t) => t.name === 'Vermillion Llama'
     )
-    const message = `Congrats on the previous project completion, <@${testTeam.discordRole}>! As we prepare for the next project, 
+    const message = `Congrats on the previous project completion, <@&${testTeam.discordRole}>! As we prepare for the next project, 
 we want to make sure teams have a good idea of how many people are able to contribute. 
 If you want to continue on with your current team, please run \`/continue <your-github-id>\`,
 substituting the above with your actual github id.\n
