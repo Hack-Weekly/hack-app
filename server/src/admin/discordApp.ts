@@ -10,6 +10,8 @@ import {
   LeaveTeamCommand,
   LFMCommand,
   LFTCommand,
+  PrePurgeCommand,
+  PurgeCommand,
   RecruitCommand,
   RegisterCommand,
   RemoveFromTeamCommand,
@@ -27,6 +29,8 @@ export const commands: DiscordAppCommand[] = [
   new SetTeamCommand(),
   new ContinueCommand(),
   new RegisterCommand(),
+  new PurgeCommand(),
+  new PrePurgeCommand(),
 ]
 
 export const hackWeeklyDiscordApp = {

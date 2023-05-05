@@ -42,6 +42,12 @@ class FirebaseApi {
   async getTeams() {
     return this.getRecords<TeamT>('teams')
   }
+  async getActiveTeams() {
+    const teams = await this.getTeams()
+    const users = await this.getUsers()
+    const activeTeamIds = new Set(users.map(u => u.team).filter(teamId => teamId))]
+    return teams.filter(t => activeTeamIds.has(t.id))
+  }
   async getTeam(id) {
     const teams = await this.getRecords<TeamT>('teams')
     return teams.find(

@@ -2,6 +2,7 @@
 export const hackWeeklyDiscord = {
   id: '1082086126954758174',
   botId: '1092652146077487175',
+  testUserId: '1085366474593550367',
   lfgChannel: '1099216334472085534',
   specialRoles: {
     admin: '1082144709230723072',

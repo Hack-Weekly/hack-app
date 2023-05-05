@@ -152,6 +152,7 @@ export class HWApi {
 
     // Firebase
     user.team = null
+    user.continueStatus = null
     await firebaseApi.updateUser(user)
 
     return { message: `Successfully removed ${user.name} from ${team.name}` }
@@ -174,5 +175,51 @@ export class HWApi {
     discordApi.updateLFGpost() // not awaiting - want to return quickly
 
     return { message: 'Updated team LFM status' }
+  }
+  async prePurge() {
+    if (!this.admin()) {
+      return { error: `You don't have rights to perform this operation` }
+    }
+    const users = await firebaseApi.getUsers()
+    const tasks = users
+      //.filter((u) => u.team)
+      .filter((u) => u.id === hackWeeklyDiscord.testUserId)
+      .map((u) => {
+        u.continueStatus = 'pending'
+        return firebaseApi.updateUser(u)
+      })
+    await Promise.all(tasks)
+    const activeTeams = await firebaseApi.getActiveTeams()
+    const message = `Congrats on the previous project completion! As we prepare for the next project, 
+we want to make sure teams have a good idea of how many people are able to contribute. 
+If you want to continue on with your current team, please run '/continue <your-github-id>',
+substituting the above with your actual github id.\n
+If you are not able to participate for the next project, you don't need to do anything, though you will be 
+removed from your team and need to be re-added if you wish to participate in future projects.
+`
+    // const messageTasks = activeTeams.map((t) =>
+    //   discordApi.messageChannel(t.defaultDiscordChannel, message)
+    // )
+    // await Promise.all(messageTasks)
+    const testTeam = (await firebaseApi.getTeams()).find(
+      (t) => t.name === 'Vermillion Llama'
+    )
+    console.log(testTeam)
+    discordApi.messageChannel(testTeam.defaultDiscordChannel, message)
+
+    return { message: 'Pre-purge completed' }
+  }
+  async purge() {
+    if (!this.admin()) {
+      return { error: `You don't have rights to perform this operation` }
+    }
+    const users = await firebaseApi.getUsers()
+    const usersToRemove = users.filter(
+      (u) => u.team && u.continueStatus === 'pending'
+    )
+    // const tasks = usersToRemove.map((u) => this.removeUserFromTeam(u))
+    // await Promise.all(tasks)
+
+    return { message: `Removed ${usersToRemove.length} users from teams` }
   }
 }
