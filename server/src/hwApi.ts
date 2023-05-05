@@ -190,13 +190,7 @@ export class HWApi {
       })
     await Promise.all(tasks)
     const activeTeams = await firebaseApi.getActiveTeams()
-    const message = `Congrats on the previous project completion! As we prepare for the next project, 
-we want to make sure teams have a good idea of how many people are able to contribute. 
-If you want to continue on with your current team, please run \`/continue <your-github-id>\`,
-substituting the above with your actual github id.\n
-If you are not able to participate for the next project, you don't need to do anything, though you will be 
-removed from your team and need to be re-added if you wish to participate in future projects.
-`
+
     // const messageTasks = activeTeams.map((t) =>
     //   discordApi.messageChannel(t.defaultDiscordChannel, message)
     // )
@@ -204,7 +198,13 @@ removed from your team and need to be re-added if you wish to participate in fut
     const testTeam = (await firebaseApi.getTeams()).find(
       (t) => t.name === 'Vermillion Llama'
     )
-    console.log(testTeam)
+    const message = `Congrats on the previous project completion, <@${testTeam.discordRole}>! As we prepare for the next project, 
+we want to make sure teams have a good idea of how many people are able to contribute. 
+If you want to continue on with your current team, please run \`/continue <your-github-id>\`,
+substituting the above with your actual github id.\n
+If you are not able to participate for the next project, you don't need to do anything, though you will be 
+removed from your team and need to be re-added if you wish to participate in future projects.
+    `
     discordApi.messageChannel(testTeam.defaultDiscordChannel, message)
 
     return { message: 'Pre-purge completed' }
