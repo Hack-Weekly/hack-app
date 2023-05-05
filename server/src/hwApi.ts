@@ -31,7 +31,10 @@ export class HWApi {
     discordName: string,
     discordRolesIds: string[]
   ) {
-    const existingUser = await firebaseApi.getUser({ discordId, githubId })
+    const existingUser = await firebaseApi.getUser({
+      discordId,
+      ...(githubId ? { githubId } : {}),
+    })
     if (existingUser) {
       return { error: 'User already exists' }
     }

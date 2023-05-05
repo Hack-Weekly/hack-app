@@ -108,7 +108,7 @@ export default function testingHandler(server: FastifyInstance, options, done) {
     console.log('Getting firebase users')
     const users = await firebaseApi.getUsers()
     const teams = await firebaseApi.getTeams()
-    console.log('Getting discrod users')
+    console.log('Getting discord users')
     const discordUsers = await discordRestApi.getGuildMembers()
     const newDiscordUsers = discordUsers.filter(
       (discordUser) => !users.some((u) => u.discordId === discordUser.user.id)
