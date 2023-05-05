@@ -117,12 +117,13 @@ export default function testingHandler(server: FastifyInstance, options, done) {
     let res = '{ users: ['
     for (const discordUser of newDiscordUsers) {
       res += `"${discordUser.user.id}, ${discordUser.user.username}, ${discordUser.roles}",`
-      // await HWApi.register(
-      //   discordUser.user.id,
-      //   null as any,
-      //   discordUser.user.username,
-      //   discordUser.roles
-      // )
+      await HWApi.register(
+        discordUser.user.id,
+        null as any,
+        discordUser.user.username,
+        discordUser.roles
+      )
+      break
     }
     res += ']}'
     console.log(res)
