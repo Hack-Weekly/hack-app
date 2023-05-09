@@ -74,6 +74,7 @@ export default function discordInteractionsHandler(
     if (body.type === InteractionType.ApplicationCommand) {
       for (const command of commands) {
         if (body.data.name === command.command) {
+          console.log(`Found command with name '${command.command}'`)
           const result = await command.execute(body)
           if (result.error) {
             interactionReply(`Command failed with: '${result.error}'`, res)

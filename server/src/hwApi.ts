@@ -3,6 +3,7 @@ import { githubApi } from './github/githubApi.js'
 import { TeamT, UserT } from 'shared'
 import { firebaseApi } from './firebase/firebaseApi.js'
 import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
+import { DateTime } from 'luxon'
 export class HWApi {
   invoker: UserT
   constructor(invoker: UserT) {
@@ -197,7 +198,17 @@ export class HWApi {
     if (!this.admin()) {
       return { error: `You don't have rights to perform this operation` }
     }
-    const users = await firebaseApi.getUsers()
+
+    const profile = async <T>(desc: string, promise: Promise<T>) => {
+      console.log(`Running: ${desc}`)
+      const tStart = DateTime.now()
+      const ret = await promise
+      const dur = tStart.diffNow()
+      console.log(`Done: ${desc} (${dur.toString})`)
+      return ret
+    }
+
+    const users = await profile('Getting users', firebaseApi.getUsers())
     const tasks = users
       //.filter((u) => u.team)
       .filter((u) => u.discordId === hackWeeklyDiscord.testUserId)
@@ -205,8 +216,11 @@ export class HWApi {
         u.continueStatus = 'pending'
         return firebaseApi.updateUser(u)
       })
-    await Promise.all(tasks)
-    const activeTeams = await firebaseApi.getActiveTeams()
+    await profile('Updating users', Promise.all(tasks))
+    const activeTeams = await profile(
+      'Getting active teams',
+      firebaseApi.getActiveTeams()
+    )
     const message = (
       team: TeamT
     ) => `Congrats on the previous project completion, <@&${team.discordRole}>! As we prepare for the next project, 
