@@ -210,8 +210,8 @@ export class HWApi {
 
     const users = await profile('Getting users', firebaseApi.getUsers())
     const tasks = users
-      //.filter((u) => u.team)
-      .filter((u) => u.discordId === hackWeeklyDiscord.testUserId)
+      .filter((u) => u.team)
+      //.filter((u) => u.discordId === hackWeeklyDiscord.testUserId)
       .map((u) => {
         u.continueStatus = 'pending'
         return firebaseApi.updateUser(u)
@@ -230,17 +230,20 @@ substituting the above with your actual github id.\n
 If you are not able to participate for the next project, you don't need to do anything, though you will be 
 removed from your team and need to be re-added if you wish to participate in future projects.
     `
-    // const messageTasks = activeTeams.map((t) =>
-    //   discordApi.messageChannel(t.defaultDiscordChannel, message(t))
-    // )
-    // await Promise.all(messageTasks)
+    const messageTasks = activeTeams.map((t) =>
+      discordApi.messageChannel(t.defaultDiscordChannel, message(t))
+    )
+    await Promise.all(messageTasks)
 
     // const testTeam = (await firebaseApi.getTeams()).find(
     //   (t) => t.name === 'Vermillion Llama'
     // )
     // discordApi.messageChannel(testTeam.defaultDiscordChannel, message(testTeam))
-    return { message: activeTeams.map((t) => t.name).join(',') }
-    return { message: 'Pre-purge completed' }
+    return {
+      message:
+        'Pre-purge completed, message sent to: ' +
+        activeTeams.map((t) => t.name).join(','),
+    }
   }
   async purge() {
     if (!this.admin()) {
