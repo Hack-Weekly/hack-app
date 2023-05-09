@@ -204,7 +204,7 @@ export class HWApi {
       const tStart = DateTime.now()
       const ret = await promise
       const dur = tStart.diffNow()
-      console.log(`Done: ${desc} (${dur.toString})`)
+      console.log(`Done: ${desc} (${dur.toString()})`)
       return ret
     }
 

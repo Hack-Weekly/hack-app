@@ -4,9 +4,9 @@ import { firestoreDb } from '../firebase.js'
 class FirebaseApi {
   private async getRecords<T>(colName: string) {
     const col = firestoreDb.collection(colName)
-    const refs = await col.listDocuments()
-    const snapshots = await Promise.all(refs.map((t) => t.get()))
-    return snapshots.map((sn) => ({ id: sn.id, ...sn.data() } as T))
+    const snapshots = await col.get()
+    //const snapshots = await Promise.all(refs.map((t) => t.get()))
+    return snapshots.docs.map((sn) => ({ id: sn.id, ...sn.data() } as T))
   }
   async getUsers() {
     return this.getRecords<UserT>('users')
