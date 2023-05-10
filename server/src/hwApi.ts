@@ -4,6 +4,16 @@ import { TeamT, UserT } from 'shared'
 import { firebaseApi } from './firebase/firebaseApi.js'
 import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
 import { DateTime } from 'luxon'
+
+const profile = async <T>(desc: string, promise: Promise<T>) => {
+  console.log(`Running: ${desc}`)
+  const tStart = DateTime.now()
+  const ret = await promise
+  const dur = tStart.diffNow()
+  console.log(`Done: ${desc} (${dur.toString()})`)
+  return ret
+}
+
 export class HWApi {
   invoker: UserT
   constructor(invoker: UserT) {
@@ -120,7 +130,10 @@ export class HWApi {
     }
 
     if (user.team) {
-      await this.removeUserFromTeam(user)
+      await profile(
+        'Removing from existing team',
+        this.removeUserFromTeam(user)
+      )
       user.team = null
     }
 
@@ -128,13 +141,19 @@ export class HWApi {
     user.team = team.id
     const refreshLfg = !!user.lft
     user.lft = null
-    await firebaseApi.updateUser(user)
+    await profile('Updating firebase status', firebaseApi.updateUser(user))
 
     // Github
-    await githubApi.addUserToTeam(user.githubId, team.githubTeam)
+    await profile(
+      'Updating github status',
+      githubApi.addUserToTeam(user.githubId, team.githubTeam)
+    )
 
     // Discord
-    await discordApi.addUserToTeam(user.discordId, team.discordRole)
+    await profile(
+      'Adding discord role',
+      discordApi.addUserToTeam(user.discordId, team.discordRole)
+    )
     if (refreshLfg) {
       discordApi.updateLFGpost()
     }
@@ -197,15 +216,6 @@ export class HWApi {
   async prePurge() {
     if (!this.admin()) {
       return { error: `You don't have rights to perform this operation` }
-    }
-
-    const profile = async <T>(desc: string, promise: Promise<T>) => {
-      console.log(`Running: ${desc}`)
-      const tStart = DateTime.now()
-      const ret = await promise
-      const dur = tStart.diffNow()
-      console.log(`Done: ${desc} (${dur.toString()})`)
-      return ret
     }
 
     const users = await profile('Getting users', firebaseApi.getUsers())
