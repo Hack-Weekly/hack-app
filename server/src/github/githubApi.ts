@@ -1,3 +1,4 @@
+import { App } from 'octokit'
 import { Octokit } from '@octokit/core'
 import { createAppAuth } from '@octokit/auth-app'
 import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods'
@@ -12,23 +13,34 @@ class GithubApi {
   octo: Octokit & Api
   private async getOcto() {
     if (!this.octo) {
-      const auth = createAppAuth({
-        appId: '319149',
+      // console.log(GITHUB_PRIVATE_KEY)
+      // const auth = createAppAuth({
+      //   appId: 319149,
+      //   privateKey: GITHUB_PRIVATE_KEY,
+      //   installationId: 36524583,
+      // })
+      // const { token } = await auth({ type: 'app' })
+      // const MyOctokit = Octokit.plugin(restEndpointMethods)
+      // this.octo = new MyOctokit({ auth: token, request: {} })
+      const app = new App({
+        appId: 319149,
         privateKey: GITHUB_PRIVATE_KEY,
-        installationId: '36524583',
       })
-      const { token } = await auth({ type: 'installation' })
-      const MyOctokit = Octokit.plugin(restEndpointMethods)
-      this.octo = new MyOctokit({ auth: token, request: {} })
+      this.octo = await app.getInstallationOctokit(36524583)
     }
     return this.octo
   }
   private async request(path: string, params: RequestParameters = {}) {
     const octokit = await this.getOcto()
-    return await octokit.request(path, {
-      headers: { 'X-Github-Api-Version': '2022-11-28' },
-      ...params,
-    })
+    try {
+      return await octokit.request(path, {
+        headers: { 'X-Github-Api-Version': '2022-11-28' },
+        ...params,
+      })
+    } catch (e) {
+      console.log(`Github request failed: ${e}`)
+      return undefined
+    }
   }
   private async getTeamId(teamName: string) {
     const octokit = await this.getOcto()
