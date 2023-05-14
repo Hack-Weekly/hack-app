@@ -33,11 +33,11 @@ class Proj4FirebaseApi {
     await pgnCol.doc(res.id).set({ pgn: chess.pgn() })
     return res.id
   }
-  async setGame(_board: ChessGame) {
-    const board = { ..._board, lastMove: Timestamp.now() }
-    const id = _board.id
-    delete board['id']
-    await gamesCol.doc(id).update(board)
+  async setGame(id: string, fen: string) {
+    const game = await this.getGame(id)
+    const newGame = { ...game, lastMove: Timestamp.now(), fen: fen }
+    delete newGame['id']
+    await gamesCol.doc(id).update(newGame)
   }
   async setPgn(id: string, pgn: string) {
     await pgnCol.doc(id).update({ pgn })

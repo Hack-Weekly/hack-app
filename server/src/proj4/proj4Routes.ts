@@ -50,7 +50,7 @@ export default function proj4Routes(server: FastifyInstance, options, done) {
     try {
       chess.move(move.move) // This throws if illegal
       await Promise.all([
-        proj4FirebaseApi.setGame({ id: gameId, fen: chess.fen() }),
+        proj4FirebaseApi.setGame(gameId, chess.fen()),
         proj4FirebaseApi.setPgn(gameId, chess.pgn()),
       ])
       return { fen: chess.fen() }
