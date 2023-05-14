@@ -12,6 +12,7 @@ import {
 import { currentHost } from './shared.js'
 import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
 import testingHandler from './testing/testingRoutes.js'
+import proj4Routes from './proj4/proj4Routes.js'
 
 export function createServer() {
   const server = fastify()
@@ -63,6 +64,9 @@ export function createServer() {
   })
   server.register(testingHandler, {
     prefix: '/testing',
+  })
+  server.register(proj4Routes, {
+    prefix: '/proj4',
   })
 
   server.setErrorHandler((error, req, res) => {

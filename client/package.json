@@ -18,6 +18,7 @@
     "@radix-ui/react-dialog": "^1.0.3",
     "@swc/plugin-emotion": "^2.5.56",
     "@types/luxon": "^3.2.0",
+    "chess.js": "1.0.0-beta.5",
     "clsx": "^1.2.1",
     "firebase": "^9.19.1",
     "immer": "^9.0.21",

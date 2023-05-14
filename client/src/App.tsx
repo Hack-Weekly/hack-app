@@ -28,6 +28,7 @@ import "./globals.css";
 import NavBar from "./components/NavBar/NavBar";
 import Login from "./pages/login/Login";
 import { TestPage } from "./pages/test/TestPage";
+import { Proj4Page } from "./pages/proj4/Proj4Page";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/test",
         element: <TestPage />,
+      },
+      {
+        path: "/proj4",
+        element: <Proj4Page />,
       },
     ],
   },

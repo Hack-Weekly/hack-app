@@ -8,5 +8,8 @@ export default defineConfig({
       jsxImportSource: "@emotion/react",
     }),
   ],
+  // optimizeDeps: {
+  //   exclude: ["chess.js"],
+  // },
   define: {},
 });
