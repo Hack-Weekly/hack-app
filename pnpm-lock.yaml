@@ -192,7 +192,7 @@ importers:
         specifier: ^0.12.7
         version: 0.12.7
       shared:
-        specifier: link:../shared
+        specifier: workspace:../shared
         version: link:../shared
       socket.io:
         specifier: ^4.6.1
