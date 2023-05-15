@@ -47,6 +47,7 @@ export class HWApi {
       ...(githubId ? { githubId } : {}),
     })
     if (existingUser) {
+      const updates = []
       if (githubId && !existingUser.githubId) {
         // TODO: I don't love that people just specify an ID with no validation
         existingUser.githubId = githubId
@@ -56,7 +57,18 @@ export class HWApi {
           await githubApi.addUserToTeam(githubId, curTeam.githubTeam)
         }
 
-        return { message: 'Updated existing github ID' }
+        updates.push('Updated existing github ID')
+      }
+
+      if (!discordRolesIds.includes(hackWeeklyDiscord.specialRoles.member)) {
+        await discordApi.addUserToMember(discordId)
+        updates.push('Added discord member role')
+      }
+
+      if (updates.length > 0) {
+        return {
+          message: `User exists, but updated: [${updates.join(', ')}]`,
+        }
       }
 
       return { error: 'User already exists' }
