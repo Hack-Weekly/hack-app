@@ -51,7 +51,7 @@ class DiscordRestApi {
     })
 
     if (!resp.ok) {
-      console.log(`Call failed with ${resp}`)
+      console.log(`Call failed with ${JSON.stringify(resp)}`)
       throw new Error(await resp.json())
     }
 
