@@ -6,6 +6,7 @@ import {
   APIMessage,
   RESTGetAPIChannelMessagesResult,
 } from 'discord-api-types/v10'
+import { sleep } from 'shared/utils.js'
 
 // This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
@@ -37,6 +38,17 @@ class DiscordRestApi {
     this.guildId = hackWeeklyDiscord.id
   }
   async request(method: string, path: string, body: any = undefined) {
+    let tryNum = 0
+    while (tryNum++ < 3) {
+      try {
+        return await this._request(method, path, body)
+      } catch (e) {
+        await sleep(1000)
+      }
+    }
+    throw new Error(`Retries exhausted for ${method} ${path}`)
+  }
+  async _request(method: string, path: string, body: any = undefined) {
     const bodyObj = body ? { body: JSON.stringify(body) } : {}
     console.log(
       `Calling ${method} ${path} with content ${JSON.stringify(bodyObj)}`

@@ -26,7 +26,7 @@ export class SetTeamLeadCommand extends RegisteredUserAppCommand {
         required: true,
       },
       {
-        name: 'teamLead',
+        name: 'teamlead',
         description: 'Whether specified user should be a team lead',
         type: ApplicationCommandOptionType.Boolean,
         required: true,
