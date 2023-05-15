@@ -17,6 +17,7 @@ import {
   RemoveFromTeamCommand,
   RemoveFromTeamSlashCommand,
   SetTeamCommand,
+  SetTeamLeadCommand,
 } from './commands/index.js'
 
 export const commands: DiscordAppCommand[] = [
@@ -27,6 +28,7 @@ export const commands: DiscordAppCommand[] = [
   new LFTCommand(),
   new LeaveTeamCommand(),
   new SetTeamCommand(),
+  new SetTeamLeadCommand(),
   new ContinueCommand(),
   new RegisterCommand(),
   new PurgeCommand(),

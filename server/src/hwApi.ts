@@ -273,4 +273,20 @@ removed from your team and need to be re-added if you wish to participate in fut
         .join(',')}`,
     }
   }
+  async setTeamLead(targetUser: UserT, teamLead: boolean) {
+    if (!this.admin()) {
+      return { error: `You don't have rights to perform this operation` }
+    }
+
+    // Firebase
+    targetUser.teamLead = teamLead
+    await firebaseApi.updateUser(targetUser)
+
+    // Discord
+    await discordApi.setTeamLead(targetUser.discordId, teamLead)
+
+    return {
+      message: 'Team leadership updated',
+    }
+  }
 }

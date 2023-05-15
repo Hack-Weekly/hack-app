@@ -116,6 +116,19 @@ class DiscordApi {
       ...team,
     }
   }
+  async setTeamLead(userId: string, teamLead: boolean) {
+    if (teamLead) {
+      return await discordRestApi.AddRole(
+        hackWeeklyDiscord.specialRoles.teamLead,
+        userId
+      )
+    } else {
+      return await discordRestApi.RemoveRole(
+        hackWeeklyDiscord.specialRoles.teamLead,
+        userId
+      )
+    }
+  }
   async addUserToTeam(userId: string, teamId: string) {
     return await discordRestApi.AddRole(teamId, userId)
   }
