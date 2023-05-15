@@ -53,9 +53,11 @@ class DiscordRestApi {
     if (!resp.ok) {
       const respJson = await resp.json()
       const respTxt = JSON.stringify(respJson)
-      console.log(
-        `Call failed with ${respTxt}, headers ${JSON.stringify(resp.headers)}`
-      )
+      console.log('Call failed')
+      resp.headers.forEach((h) => {
+        console.log(h)
+      })
+      console.log(`body: ${respTxt}`)
       throw new Error(respTxt)
     }
 
