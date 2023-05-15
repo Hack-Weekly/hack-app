@@ -16,6 +16,7 @@ import {
   RegisterCommand,
   RemoveFromTeamCommand,
   RemoveFromTeamSlashCommand,
+  SetGithubIdCommand,
   SetTeamCommand,
   SetTeamLeadCommand,
 } from './commands/index.js'
@@ -29,6 +30,7 @@ export const commands: DiscordAppCommand[] = [
   new LeaveTeamCommand(),
   new SetTeamCommand(),
   new SetTeamLeadCommand(),
+  new SetGithubIdCommand(),
   new ContinueCommand(),
   new RegisterCommand(),
   new PurgeCommand(),

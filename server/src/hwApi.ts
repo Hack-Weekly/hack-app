@@ -302,4 +302,23 @@ removed from your team and need to be re-added if you wish to participate in fut
       message: 'Team leadership updated',
     }
   }
+  async setGithubId(targetUser: UserT, githubId: string) {
+    if (!this.admin()) {
+      return { error: `You don't have rights to perform this operation` }
+    }
+
+    // Firebase
+    targetUser.githubId = githubId
+    await firebaseApi.updateUser(targetUser)
+
+    // Update github team, if needed
+    if (githubId && targetUser.team) {
+      const team = await firebaseApi.getTeam(targetUser.team)
+      await githubApi.addUserToTeam(githubId, team.githubTeam)
+    }
+
+    return {
+      message: 'Github id updated',
+    }
+  }
 }
