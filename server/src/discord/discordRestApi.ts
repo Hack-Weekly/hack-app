@@ -6,10 +6,21 @@ import {
   APIMessage,
   RESTGetAPIChannelMessagesResult,
 } from 'discord-api-types/v10'
-import { sleep } from 'shared'
 
 // This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
+
+export function sleep(ms: number, props: any = undefined) {
+  let res: any
+  props?.signal?.addEventListener('abort', () => {
+    res()
+  })
+  return new Promise((resolve, reject) => {
+    res = resolve
+    setTimeout(resolve, ms)
+  })
+}
+
 export class DiscordUserRestApi {
   token: string
   constructor(token: string) {
