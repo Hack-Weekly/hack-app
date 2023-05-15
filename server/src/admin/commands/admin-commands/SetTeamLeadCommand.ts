@@ -11,7 +11,7 @@ import { UserT } from 'shared'
 import { HWApi } from '@/hwApi.js'
 
 export class SetTeamLeadCommand extends RegisteredUserAppCommand {
-  valueOptions = { user: true, teamLead: true }
+  valueOptions = { user: true, teamlead: true }
   listOptions = {}
   definition = {
     name: 'setteamlead',
@@ -34,7 +34,7 @@ export class SetTeamLeadCommand extends RegisteredUserAppCommand {
     ],
   } as Partial<APIApplicationCommand>
   handler = async (invoker: UserT, opts) => {
-    const { user, teamLead } = opts
+    const { user, teamlead } = opts
     const targetUser = await firebaseApi.getUser({
       discordId: user,
     })
@@ -44,6 +44,6 @@ export class SetTeamLeadCommand extends RegisteredUserAppCommand {
       }
     }
     const hwApi = new HWApi(invoker)
-    return await hwApi.setTeamLead(targetUser, teamLead)
+    return await hwApi.setTeamLead(targetUser, teamlead)
   }
 }
