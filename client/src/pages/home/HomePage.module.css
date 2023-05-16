@@ -1,5 +1,22 @@
 .container {
+  margin: 2rem 0;
   overflow: hidden;
+}
+
+.container > * {
+  margin-bottom: 3rem;
+}
+
+.container > *:last-child {
+  margin-bottom: 0;
+}
+
+.currentProjectPanel {
+  max-width: 1320px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--side-padding);
 }
 
 .currentProject {
@@ -50,7 +67,10 @@
 
 /* PARTICIPATE? */
 .joinPanel {
-  margin-top: 3rem;
+  max-width: 1320px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0 var(--side-padding);
   display: flex;
   flex-direction: column;
