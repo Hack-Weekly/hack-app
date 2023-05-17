@@ -13,3 +13,4 @@ export * from './team-lead-commands/RemoveFromTeamSlashCommand.js'
 
 export * from './any-user-commands/ContinueCommand.js'
 export * from './any-user-commands/RegisterCommand.js'
+export * from './any-user-commands/ShowTeamCommand.js'
