@@ -19,9 +19,11 @@ import {
   SetGithubIdCommand,
   SetTeamCommand,
   SetTeamLeadCommand,
+  ShowTeamCommand,
 } from './commands/index.js'
 
 export const commands: DiscordAppCommand[] = [
+  new ShowTeamCommand(),
   new LFMCommand(),
   new RecruitCommand(),
   new RemoveFromTeamCommand(),
