@@ -1,19 +1,26 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { TeamT } from "shared";
-import { useAppStore, useCurrentProject } from "../../global-state/globalState";
-import styles from "./HomePage.module.css";
+
 import Button from "../../components/Button/Button";
 import Carousel from "../../components/Carousel/Carousel";
+import { useAppStore, useCurrentProject } from "../../global-state/globalState";
+import styles from "./HomePage.module.css";
 
 const CurrentProjectPanel: FC = () => {
   const currentProject = useCurrentProject();
-  if (!currentProject) {
-    return <div>No current project</div>;
-  }
+
   return (
-    <div className={styles.currentProject}>
-      The current project is: <br />"{currentProject?.description}"
+    <div className={styles.currentProjectPanel}>
+      <div className={styles.currentProject}>
+        {currentProject ? (
+          <p>
+            The current project is: <br />"{currentProject.description}"
+          </p>
+        ) : (
+          <p>There is no current project</p>
+        )}
+      </div>
     </div>
   );
 };
