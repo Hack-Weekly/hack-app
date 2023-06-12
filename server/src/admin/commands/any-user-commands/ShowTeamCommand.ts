@@ -36,7 +36,7 @@ export class ShowTeamCommand extends DiscordAppCommand {
 
     const users = await firebaseApi.getUsers()
     const teamUsers = users.filter((user) => user.team === targetTeam.id)
-    const teamUserDiscordIds = teamUsers.map((user) => `<@!${user.discordId}>`)
+    const teamUserDiscordIds = teamUsers.map((user) => `<@${user.discordId}>`)
 
     return {
       message: `Team ${targetTeam.name} has ${
