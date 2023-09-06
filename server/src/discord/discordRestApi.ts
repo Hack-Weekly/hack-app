@@ -128,7 +128,7 @@ class DiscordRestApi {
     return this.request('GET', path) as Promise<APIMessage[]>
   }
   async MessageChannel(channelId: string, message: string) {
-    const path = `/channels/894965779886395407/messages`
+    const path = `/channels/${channelId}/messages`
     return await this.request('POST', path, {
       content: message,
     })
