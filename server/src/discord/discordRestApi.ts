@@ -6,6 +6,7 @@ import {
   APIMessage,
   RESTGetAPIChannelMessagesResult,
 } from 'discord-api-types/v10'
+import { RateLimitError } from '@/error/RateLimitError.js'
 
 // This is our API wrapper for interacting with discord REST API - add roles, create teams, etc.
 const apiRoot = 'https://discord.com/api'
@@ -54,6 +55,10 @@ class DiscordRestApi {
       try {
         return await this._request(method, path, body)
       } catch (e) {
+        if (e instanceof RateLimitError) {
+          await sleep(Number(e.message) * 1000);
+          continue;
+        }
         await sleep(1000)
       }
     }
@@ -81,6 +86,11 @@ class DiscordRestApi {
         console.log(`${k}: ${v}`)
       })
       console.log(`body: ${respTxt}`)
+
+      if(resp.headers.get("x-ratelimit-remaining") == "0") {
+        throw new RateLimitError(resp.headers.get("x-ratelimit-reset-after"));
+      }
+
       throw new Error(respTxt)
     }
 
