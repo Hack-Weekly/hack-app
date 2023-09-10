@@ -321,4 +321,28 @@ removed from your team and need to be re-added if you wish to participate in fut
       message: 'Github id updated',
     }
   }
+  async cleanupTeam(teamRole: string) {
+    const targetTeam = await firebaseApi.getTeam(teamRole)
+    
+    if (!targetTeam) {
+      return {
+        error: "Team associated to the role not found"
+      }
+    }
+    
+    const users = await firebaseApi.getUsers()
+    const teamMembers = users.filter(
+      (u) => u.team === targetTeam.id
+    )
+
+    for (const user of teamMembers) {
+      this.removeUserFromTeam(user)
+
+      if (user.teamLead) {
+        await this.setTeamLead(user, false)
+      }
+    }
+    
+    discordApi.resetTeamDefaultChannel(targetTeam)
+  }
 }

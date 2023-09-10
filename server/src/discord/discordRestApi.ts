@@ -82,9 +82,9 @@ class DiscordRestApi {
       const respJson = await resp.json()
       const respTxt = JSON.stringify(respJson)
       console.log('Call failed')
-      resp.headers.forEach((v, k) => {
-        console.log(`${k}: ${v}`)
-      })
+      // resp.headers.forEach((v, k) => {
+      //   console.log(`${k}: ${v}`)
+      // })
       console.log(`body: ${respTxt}`)
 
       if(resp.headers.get("x-ratelimit-remaining") == "0") {
@@ -142,6 +142,22 @@ class DiscordRestApi {
   async DeleteMessage(channelId: string, messageId: string) {
     const path = `/channels/${channelId}/messages/${messageId}`
     return await this.request('DELETE', path)
+  }
+  async GetChannel(channelId: string) {
+    const path = `/channels/${channelId}`
+    return await this.request('GET', path)
+  }
+  async DeleteChannel(channelId: string) {
+    const path = `/channels/${channelId}`
+    return await this.request('DELETE', path)
+  }
+  async CreateChannel(channelName: string, categoryId: string) {
+    const path = `/guilds/${this.guildId}/channels`
+    return await this.request('POST', path, {
+      name: channelName,
+      type: 0,
+      parent_id: categoryId
+    })
   }
 }
 
