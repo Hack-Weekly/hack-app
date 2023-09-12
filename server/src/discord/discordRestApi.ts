@@ -143,6 +143,22 @@ class DiscordRestApi {
     const path = `/channels/${channelId}/messages/${messageId}`
     return await this.request('DELETE', path)
   }
+  async GetChannel(channelId: string) {
+    const path = `/channels/${channelId}`
+    return await this.request('GET', path)
+  }
+  async DeleteChannel(channelId: string) {
+    const path = `/channels/${channelId}`
+    return await this.request('DELETE', path)
+  }
+  async CreateChannel(channelName: string, categoryId: string) {
+    const path = `/guilds/${this.guildId}/channels`
+    return await this.request('POST', path, {
+      name: channelName,
+      type: 0,
+      parent_id: categoryId
+    })
+  }
 }
 
 export const discordRestApi = new DiscordRestApi()
