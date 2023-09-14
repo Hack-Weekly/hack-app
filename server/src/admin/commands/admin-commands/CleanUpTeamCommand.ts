@@ -26,7 +26,7 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
     ],
   } as Partial<APIApplicationCommand>
 
-  handler = async (invoker: UserT, opts) => {
+  handler = async (invoker: UserT, opts: { team: string }) => {
     const { team } = opts
     const targetTeam = await firebaseApi.getTeam(team)
 

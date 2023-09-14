@@ -56,8 +56,8 @@ class DiscordRestApi {
         return await this._request(method, path, body)
       } catch (e) {
         if (e instanceof RateLimitError) {
-          await sleep(Number(e.message) * 1000);
-          continue;
+          await sleep(Number(e.message) * 1000)
+          continue
         }
         await sleep(1000)
       }
@@ -80,6 +80,10 @@ class DiscordRestApi {
 
     if (!resp.ok) {
       const respJson = await resp.json()
+      if (method === 'DELETE' && respJson.code === 10007) {
+        console.log('Call failed, but deleting unknown member - ok')
+        return {}
+      }
       const respTxt = JSON.stringify(respJson)
       console.log('Call failed')
       resp.headers.forEach((v, k) => {
@@ -87,8 +91,8 @@ class DiscordRestApi {
       })
       console.log(`body: ${respTxt}`)
 
-      if(resp.headers.get("x-ratelimit-remaining") == "0") {
-        throw new RateLimitError(resp.headers.get("x-ratelimit-reset-after"));
+      if (resp.headers.get('x-ratelimit-remaining') == '0') {
+        throw new RateLimitError(resp.headers.get('x-ratelimit-reset-after'))
       }
 
       throw new Error(respTxt)
@@ -156,7 +160,7 @@ class DiscordRestApi {
     return await this.request('POST', path, {
       name: channelName,
       type: 0,
-      parent_id: categoryId
+      parent_id: categoryId,
     })
   }
 }
