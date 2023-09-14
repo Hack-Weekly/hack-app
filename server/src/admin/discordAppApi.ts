@@ -29,12 +29,23 @@ class DiscordAppApi {
   }
 
   async AddCommandWithName(name: string) {
-    for (const cmd of hackWeeklyDiscordApp.commands
+    const matchingCmds = hackWeeklyDiscordApp.commands
       .map((c) => c.definition)
-      .filter((c) => c.name === name)) {
-      console.log(`Registering cmd "${cmd.name}"`)
-      const res = await this.AddCommand(cmd)
-      console.log(res)
+      .filter((c) => c.name === name)
+    if (matchingCmds.length !== 1) {
+      return {
+        error: `Expected one match, found [${matchingCmds.map(
+          (c) => c.name
+        )}](${matchingCmds.length})`,
+      }
+    }
+    const cmd = matchingCmds[0]
+
+    console.log(`Registering cmd "${cmd.name}"`)
+    const res = await this.AddCommand(cmd)
+    console.log(res)
+    return {
+      message: 'Success?',
     }
   }
 }
