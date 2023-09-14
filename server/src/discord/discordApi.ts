@@ -2,7 +2,7 @@ import { hackWeeklyDiscord } from './hackWeeklyDiscord.js'
 import { teamList } from '../teams.js'
 import { discordRestApi } from './discordRestApi.js'
 import { firebaseApi } from '../firebase/firebaseApi.js'
-import { UserT } from 'shared'
+import { TeamT, UserT } from 'shared'
 
 const teamsSection = async () => {
   const teams = (await firebaseApi.getTeams()).filter((t) => t.lfm)
@@ -188,6 +188,18 @@ ${await teamsSection()}${await usersSection()}
     } catch (e) {
       console.log(`Failed to update LFG post: ${e}`)
     }
+  }
+  private async _recreateChannel(existingChannelId: string) {
+    const targetChannel = await discordRestApi.GetChannel(existingChannelId)
+    const newChannel = await discordRestApi.CreateChannel(targetChannel['name'], targetChannel['parent_id'])
+    await discordRestApi.DeleteChannel(existingChannelId)
+
+    return newChannel
+  }
+  async resetTeamDefaultChannel(teamChannelId: string) {
+    const newChannel = await this._recreateChannel(teamChannelId)
+    
+    return newChannel['id']
   }
 }
 

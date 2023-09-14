@@ -203,6 +203,9 @@ export class HWApi {
     // Firebase
     user.team = null
     user.continueStatus = null
+    if (user.teamLead) {
+      await this.setTeamLead(user, false)
+    }
     await firebaseApi.updateUser(user)
 
     return { message: `Successfully removed ${user.name} from ${team.name}` }
@@ -319,6 +322,31 @@ removed from your team and need to be re-added if you wish to participate in fut
 
     return {
       message: 'Github id updated',
+    }
+  }
+  async cleanupTeam(targetTeam: TeamT) {
+    if (!this.admin()) {
+      return { 
+        error: `You don't have rights to perform this operation` 
+      }
+    }
+
+    const users = await firebaseApi.getUsers()
+    const teamMembers = users.filter(
+      (u) => u.team === targetTeam.id
+    )
+
+    for (const user of teamMembers) {
+      await this.removeUserFromTeam(user)
+    }
+    
+    const newChannelId = await discordApi.resetTeamDefaultChannel(targetTeam.defaultDiscordChannel)
+    
+    targetTeam.defaultDiscordChannel = newChannelId
+    await firebaseApi.updateTeam(targetTeam)
+    
+    return {
+      message: 'Team cleanup done'
     }
   }
 }

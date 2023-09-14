@@ -9,7 +9,7 @@ import {
   GITHUB_CLIENT_SECRET,
   GITHUB_PRIVATE_KEY,
 } from './secrets.js'
-import { currentHost } from './shared.js'
+import { currentHost, isProd } from './shared.js'
 import { hackWeeklyDiscord } from './discord/hackWeeklyDiscord.js'
 import testingHandler from './testing/testingRoutes.js'
 import proj4Routes from './proj4/proj4Routes.js'
@@ -62,9 +62,11 @@ export function createServer() {
   server.register(discordInteractionsHandler, {
     prefix: '/discordInteractions',
   })
-  server.register(testingHandler, {
-    prefix: '/testing',
-  })
+  if (!isProd) {
+    server.register(testingHandler, {
+      prefix: '/testing',
+    })
+  }
   server.register(proj4Routes, {
     prefix: '/proj4',
   })
