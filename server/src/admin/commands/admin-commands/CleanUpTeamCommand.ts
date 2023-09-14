@@ -27,9 +27,9 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
   } as Partial<APIApplicationCommand>
 
   handler = async (invoker: UserT, opts) => {
-    const { teamRole } = opts
+    const { team } = opts
 
-    const targetTeam = await firebaseApi.getTeam(teamRole)
+    const targetTeam = await firebaseApi.getTeam(team)
 
     if (!targetTeam) {
       return {
@@ -38,6 +38,6 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
     }
 
     const hwApi = new HWApi(invoker)
-    return await hwApi.cleanupTeam(teamRole)
+    return await hwApi.cleanupTeam(team)
   }
 }
