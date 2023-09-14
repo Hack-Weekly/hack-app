@@ -12,6 +12,7 @@ import {
   LFTCommand,
   PrePurgeCommand,
   PurgeCommand,
+  CleanUpTeamCommand,
   RecruitCommand,
   RegisterCommand,
   RemoveFromTeamCommand,
@@ -37,6 +38,7 @@ export const commands: DiscordAppCommand[] = [
   new RegisterCommand(),
   new PurgeCommand(),
   new PrePurgeCommand(),
+  new CleanUpTeamCommand(),
 ]
 
 export const hackWeeklyDiscordApp = {

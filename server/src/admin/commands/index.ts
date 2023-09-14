@@ -3,6 +3,7 @@ export * from './admin-commands/SetTeamLeadCommand.js'
 export * from './admin-commands/SetGithubIdCommand.js'
 export * from './admin-commands/PrePurgeCommand.js'
 export * from './admin-commands/PurgeCommand.js'
+export * from './admin-commands/CleanUpTeamCommand.js'
 
 export * from './registered-user-commands/LFTCommand.js'
 export * from './registered-user-commands/LeaveTeamCommand.js'
