@@ -326,27 +326,28 @@ removed from your team and need to be re-added if you wish to participate in fut
   }
   async cleanupTeam(targetTeam: TeamT) {
     if (!this.admin()) {
-      return { 
-        error: `You don't have rights to perform this operation` 
+      return {
+        error: `You don't have rights to perform this operation`,
       }
     }
 
+    console.log(`Cleaning up team: ${JSON.stringify(targetTeam)}`)
     const users = await firebaseApi.getUsers()
-    const teamMembers = users.filter(
-      (u) => u.team === targetTeam.id
-    )
+    const teamMembers = users.filter((u) => u.team === targetTeam.id)
 
     for (const user of teamMembers) {
       await this.removeUserFromTeam(user)
     }
-    
-    const newChannelId = await discordApi.resetTeamDefaultChannel(targetTeam.defaultDiscordChannel)
-    
+
+    const newChannelId = await discordApi.resetTeamDefaultChannel(
+      targetTeam.defaultDiscordChannel
+    )
+
     targetTeam.defaultDiscordChannel = newChannelId
     await firebaseApi.updateTeam(targetTeam)
-    
+
     return {
-      message: 'Team cleanup done'
+      message: 'Team cleanup done',
     }
   }
 }
