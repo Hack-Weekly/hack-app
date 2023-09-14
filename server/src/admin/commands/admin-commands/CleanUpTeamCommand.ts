@@ -28,6 +28,7 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
 
   handler = async (invoker: UserT, opts) => {
     const { team } = opts
+    console.log(`Looking for team ${team}`)
 
     const targetTeam = await firebaseApi.getTeam(team)
 
