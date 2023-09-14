@@ -128,5 +128,72 @@ export default function testingHandler(server: FastifyInstance, options, done) {
     console.log(res)
     reply.code(200).send(res)
   })
+  server.get('/genData', async (req, reply) => {
+    // (eg) add data to local firestore emulator for testing purposes
+    try {
+      const team1 = await firestoreDb.collection('teams').add({
+        name: 'test_team',
+        icon: 'test_icon',
+        discordRole: 'test_role',
+        githubTeam: 'test_github',
+        defaultDiscordChannel: 'test_channel' // pass a valid channel id here while testing
+      })
+      await firestoreDb.collection('teams').add({
+        name: 'test_team_2',
+        icon: 'test_icon_2',
+        discordRole: 'test_role_2',
+        githubTeam: 'test_github_2',
+        defaultDiscordChannel: 'test_channel_2'
+      })
+      await firestoreDb.collection('users').add({
+        name: 'test_user_1',
+        githubId: 'github_user_1',
+        discordId: 'discord_user_1',
+        team: team1.id,
+        teamLead: true,
+      })
+      await firestoreDb.collection('users').add({
+        name: 'test_user_2',
+        githubId: 'github_user_2',
+        discordId: 'discord_user_2',
+        team: team1.id,
+        teamLead: false,
+      })
+
+      console.log('database seed was successful');
+    } catch (error) {
+      console.log(error, 'database seed failed');
+    }
+  })
+  server.get('/testcleanup', async (req, reply) => {
+    const targetTeam = await firebaseApi.getTeam('test_role')
+
+    const users = await firebaseApi.getUsers()
+    const teamMembers = users.filter(
+      (u) => u.team === targetTeam.id
+    )
+    for (const user of teamMembers) {
+      console.log('removing user: ', user.name)
+      user.team = null
+      user.githubId = null
+
+      if (user.teamLead) {
+        user.teamLead = false
+        console.log('removing lead', user.name)
+      }
+      firebaseApi.updateUser(user)
+    }
+
+    const newChannelId = await discordApi.resetTeamDefaultChannel(targetTeam.defaultDiscordChannel)
+    targetTeam.defaultDiscordChannel = newChannelId
+    await firebaseApi.updateTeam(targetTeam)
+  })
+  server.get('/showData', async (req, reply) => {
+    const teams = await firebaseApi.getTeams()
+    console.log(teams)
+
+    const users = await firebaseApi.getUsers()
+    console.log(users)
+  })
   done()
 }
