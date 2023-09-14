@@ -1,11 +1,15 @@
-import { RegisteredUserAppCommand } from "../DiscordAppCommand.js";
-import { APIApplicationCommand, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
-import { UserT } from "shared";
-import { HWApi } from "@/hwApi.js";
-import { firebaseApi } from "@/firebase/firebaseApi.js";
+import { RegisteredUserAppCommand } from '../DiscordAppCommand.js'
+import {
+  APIApplicationCommand,
+  ApplicationCommandOptionType,
+  ApplicationCommandType,
+} from 'discord-api-types/v10'
+import { UserT } from 'shared'
+import { HWApi } from '@/hwApi.js'
+import { firebaseApi } from '@/firebase/firebaseApi.js'
 
 export class CleanUpTeamCommand extends RegisteredUserAppCommand {
-  valueOptions = { teamRole: true }
+  valueOptions = { team: true }
   listOptions = {}
   definition = {
     name: 'cleanupteam',
@@ -14,26 +18,26 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
     default_member_permissions: `0`,
     options: [
       {
-        name: 'role',
+        name: 'team',
         description: 'The team that you wish to cleanup',
         type: ApplicationCommandOptionType.Role,
         required: true,
       },
     ],
   } as Partial<APIApplicationCommand>
-  
+
   handler = async (invoker: UserT, opts) => {
     const { teamRole } = opts
-    
+
     const targetTeam = await firebaseApi.getTeam(teamRole)
-    
+
     if (!targetTeam) {
       return {
-        error: "Team associated to the role not found"
+        error: 'Team associated to the role not found',
       }
     }
-    
+
     const hwApi = new HWApi(invoker)
-    return await hwApi.cleanupTeam(teamRole);
+    return await hwApi.cleanupTeam(teamRole)
   }
 }
