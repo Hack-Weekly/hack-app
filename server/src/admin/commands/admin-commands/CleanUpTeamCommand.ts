@@ -28,8 +28,6 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
 
   handler = async (invoker: UserT, opts) => {
     const { team } = opts
-    console.log(`Looking for team ${team}`)
-
     const targetTeam = await firebaseApi.getTeam(team)
 
     if (!targetTeam) {
@@ -39,6 +37,6 @@ export class CleanUpTeamCommand extends RegisteredUserAppCommand {
     }
 
     const hwApi = new HWApi(invoker)
-    return await hwApi.cleanupTeam(team)
+    return await hwApi.cleanupTeam(targetTeam)
   }
 }
