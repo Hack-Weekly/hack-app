@@ -174,13 +174,26 @@ export default function testingHandler(server: FastifyInstance, options, done) {
     )
     for (const user of teamMembers) {
       console.log('removing user: ', user.name)
+      user.team = null
+      user.githubId = null
 
       if (user.teamLead) {
+        user.teamLead = false
         console.log('removing lead', user.name)
       }
+      firebaseApi.updateUser(user)
     }
 
-    discordApi.resetTeamDefaultChannel(targetTeam)
+    const newChannelId = await discordApi.resetTeamDefaultChannel(targetTeam.defaultDiscordChannel)
+    targetTeam.defaultDiscordChannel = newChannelId
+    await firebaseApi.updateTeam(targetTeam)
+  })
+  server.get('/showData', async (req, reply) => {
+    const teams = await firebaseApi.getTeams()
+    console.log(teams)
+
+    const users = await firebaseApi.getUsers()
+    console.log(users)
   })
   done()
 }

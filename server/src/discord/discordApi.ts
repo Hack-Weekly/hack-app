@@ -189,16 +189,17 @@ ${await teamsSection()}${await usersSection()}
       console.log(`Failed to update LFG post: ${e}`)
     }
   }
-  
-  async resetTeamDefaultChannel(targetTeam: TeamT) {
-    const targetChannel = await discordRestApi.GetChannel(targetTeam.defaultDiscordChannel)
-    const categoryId = targetChannel['parent_id']
-    const newChannel = await discordRestApi.CreateChannel(targetTeam.name, categoryId)
+  private async _recreateChannel(existingChannelId: string) {
+    const targetChannel = await discordRestApi.GetChannel(existingChannelId)
+    const newChannel = await discordRestApi.CreateChannel(targetChannel['name'], targetChannel['parent_id'])
+    await discordRestApi.DeleteChannel(existingChannelId)
 
-    await discordRestApi.DeleteChannel(targetTeam.defaultDiscordChannel)
-
-    targetTeam.defaultDiscordChannel = newChannel["id"]
-    await firebaseApi.updateTeam(targetTeam)
+    return newChannel
+  }
+  async resetTeamDefaultChannel(teamChannelId: string) {
+    const newChannel = await this._recreateChannel(teamChannelId)
+    
+    return newChannel['id']
   }
 }
 
